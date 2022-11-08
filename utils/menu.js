@@ -7,15 +7,30 @@ const Menu = [
     name: 'Dashboard',
     action: '/'
   },
-  { header: 'Management' },
+  { header: 'Client Management' },
   {
-    title: 'Management',
-    group: 'Management',
+    title: 'Client Management',
+    group: 'Client Management',
     icon: 'mdi-file',
     items: [
-      { name: 'staffs', title: 'Staffs', action: '/management/staffs', icon: 'mdi-home-city' },
-      { name: 'branches', title: 'Branches', action: '/management/branches', icon: 'mdi-home-city' },
-      { name: 'providers', title: 'Providers', action: '/management/providers', icon: 'mdi-home-city' }
+      { name: 'staffs', title: 'Staffs', action: '/client_management/staffs', icon: 'mdi-home-city' },
+      { name: 'branches', title: 'Branches', action: '/client_management/branches', icon: 'mdi-home-city' },
+      { name: 'providers', title: 'Providers', action: '/client_management/providers', icon: 'mdi-home-city' },
+      { name: 'owners', title: 'Owners', action: '/client_management/owners', icon: 'mdi-home-city' },
+      { name: 'shops', title: 'Shops', action: '/client_management/shops', icon: 'mdi-home-city' }
+    ]
+  },
+  { header: 'Meta' },
+  {
+    title: 'Meta',
+    group: 'Meta',
+    icon: 'mdi-file',
+    items: [
+      { name: 'regions', title: 'Regions', action: '/meta/regions', icon: 'mdi-home-city' },
+      { name: 'cities', title: 'Cities', action: '/meta/cities', icon: 'mdi-home-city' },
+      { name: 'townships', title: 'Townships', action: '/meta/townships', icon: 'mdi-home-city' },
+      { name: 'payment_methods', title: 'PaymentMethods', action: '/meta/payment_methods', icon: 'mdi-home-city' },
+      { name: 'payment_types', title: 'PaymentTypes', action: '/meta/payment_types', icon: 'mdi-home-city' }
     ]
   },
   { header: 'CRM' },

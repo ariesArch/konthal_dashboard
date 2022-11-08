@@ -11,7 +11,13 @@
 </template>
 <script>
 export default {
-  layout: 'dashboard'
+  layout: 'dashboard',
   // middleware: 'auth'
+  async created () {
+    const { status, data } = (await this.$axios.get('/init_fetch')).data
+    if (status === 1) {
+      console.log(data)
+    }
+  }
 }
 </script>
