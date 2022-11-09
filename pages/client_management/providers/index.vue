@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <v-data-table :items="branches" :headers="branchHeaders">
+    <v-data-table :items="providers" :headers="providerHeaders">
       <template #top>
         <v-toolbar flat>
           <v-text-field
@@ -37,21 +37,21 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { branchHeaders } from '@/utils/tableHeaders'
+import { providerHeaders } from '@/utils/tableHeaders'
 
 export default {
   layout: 'dashboard',
   data: () => ({
-    branchHeaders,
+    providerHeaders,
     search: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('branch/get_branches')
+    await store.dispatch('provider/get_providers')
   },
   computed: {
     ...mapState({
-      branches: (state) => {
-        return state.branch.branches
+      providers: (state) => {
+        return state.provider.providers
       }
     })
   },
