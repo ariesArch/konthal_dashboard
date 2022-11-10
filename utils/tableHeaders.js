@@ -55,7 +55,75 @@ export const cityHeaders = [
     text: 'Name',
     align: 'start',
     value: 'name'
-  }
+  },
+  {
+    text: 'Name MM',
+    align: 'start',
+    value: 'name_mm'
+  },
+  {
+    text: 'Region',
+    align: 'start',
+    value: 'region.name'
+  },
+  { text: 'Actions', value: 'actions', sortable: false }
+]
+export const regionHeaders = [
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name'
+  },
+  {
+    text: 'Name MM',
+    align: 'start',
+    value: 'name_mm'
+  },
+  { text: 'Actions', value: 'actions', sortable: false }
+]
+export const townshipHeaders = [
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name'
+  },
+  {
+    text: 'Name MM',
+    align: 'start',
+    value: 'name_mm'
+  },
+  {
+    text: 'City',
+    align: 'start',
+    value: 'city.name'
+  },
+  { text: 'Actions', value: 'actions', sortable: false }
+]
+export const paymentMethodHeaders = [
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name'
+  },
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name_mm'
+  },
+  { text: 'Actions', value: 'actions', sortable: false }
+]
+export const paymentTypeHeaders = [
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name'
+  },
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name_mm'
+  },
+  { text: 'Actions', value: 'actions', sortable: false }
 ]
 export const categoryHeader = [
   {
