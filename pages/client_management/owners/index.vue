@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <v-data-table :items="branches" :headers="branchHeaders">
+    <v-data-table :items="owners" :headers="ownerHeaders">
       <template #top>
         <v-toolbar flat>
           <v-text-field
@@ -37,21 +37,21 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import { branchHeaders } from '@/utils/tableHeaders'
+import { ownerHeaders } from '@/utils/tableHeaders'
 
 export default {
   layout: 'dashboard',
   data: () => ({
-    branchHeaders,
+    ownerHeaders,
     search: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('branch/get_branches')
+    await store.dispatch('owner/get_owners')
   },
   computed: {
     ...mapState({
-      branches: (state) => {
-        return state.branch.branches
+      owners: (state) => {
+        return state.owner.owners
       }
     })
   },
