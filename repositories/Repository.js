@@ -15,7 +15,7 @@ export default $axios => ({
   township: TownshipRepository($axios),
   region: RegionRepository($axios),
   payment_method: PaymentMethodRepository($axios),
-  payment_type: PaymentTypeRepository($axios)
+  payment_type: PaymentTypeRepository($axios),
   owner: OwnerRepository($axios),
   provider: ProviderRepository($axios)
 })
