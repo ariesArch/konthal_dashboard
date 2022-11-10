@@ -10,13 +10,17 @@
   </div>
 </template>
 <script>
+import localforage from 'localforage'
 export default {
   layout: 'dashboard',
   // middleware: 'auth'
   async created () {
-    const { status, data } = (await this.$axios.get('/init_fetch')).data
+    const { status, data } = (await this.$axios.get('/initial_fetch')).data
     if (status === 1) {
       console.log(data)
+      localforage.setItem('stored:regions', data.regions)
+      localforage.setItem('stored:cities', data.cities)
+      localforage.setItem('stored:townships', data.townships)
     }
   }
 }
