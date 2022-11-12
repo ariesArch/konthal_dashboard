@@ -33,17 +33,27 @@
         </v-icon>
       </template>
     </v-data-table>
+    <paymentTypeForm v-model="openPaymentTypeForm" :title="dialogTitle" />
+    <DetailDialog v-model="openDetailDialog" title="PaymentType" />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { paymentTypeHeaders } from '@/utils/tableHeaders'
-
+import paymentTypeForm from '@/components/FormDialog/paymentTypeForm'
+import DetailDialog from '@/components/DetailDialog/index'
 export default {
+  components: {
+    paymentTypeForm,
+    DetailDialog
+  },
   layout: 'dashboard',
   data: () => ({
     paymentTypeHeaders,
-    search: ''
+    search: '',
+    openPaymentTypeForm: false,
+    openDetailDialog: false,
+    dialogTitle: ''
   }),
   async fetch ({ store }) {
     await store.dispatch('paymentType/get_payment_types')
@@ -57,7 +67,17 @@ export default {
   },
   methods: {
     showDialog (type, item = null) {
-      console.log('fnc')
+      if (type === 'show') {
+        this.openDetailDialog = !this.openDetailDialog
+      } else {
+        if (type === 'edit') {
+          this.dialogTitle = 'Edit PaymentType'
+        } else {
+          this.dialogTitle = 'Create PaymentType'
+        }
+        this.$emit('openPaymentTypeForm', item)
+        this.openPaymentTypeForm = true
+      }
     }
   }
 }

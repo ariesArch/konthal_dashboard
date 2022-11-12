@@ -33,17 +33,27 @@
         </v-icon>
       </template>
     </v-data-table>
+    <townshipForm v-model="openTownshipForm" :title="dialogTitle" />
+    <DetailDialog v-model="openDetailDialog" title="Township" />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { townshipHeaders } from '@/utils/tableHeaders'
-
+import townshipForm from '@/components/FormDialog/townshipForm'
+import DetailDialog from '@/components/DetailDialog/index'
 export default {
+  components: {
+    townshipForm,
+    DetailDialog
+  },
   layout: 'dashboard',
   data: () => ({
     townshipHeaders,
-    search: ''
+    search: '',
+    openTownshipForm: false,
+    openDetailDialog: false,
+    dialogTitle: ''
   }),
   async fetch ({ store }) {
     await store.dispatch('township/get_townships')
@@ -57,7 +67,17 @@ export default {
   },
   methods: {
     showDialog (type, item = null) {
-      console.log('fnc')
+      if (type === 'show') {
+        this.openDetailDialog = !this.openDetailDialog
+      } else {
+        if (type === 'edit') {
+          this.dialogTitle = 'Edit Township'
+        } else {
+          this.dialogTitle = 'Create Township'
+        }
+        this.$emit('openTownshipForm', item)
+        this.openTownshipForm = true
+      }
     }
   }
 }

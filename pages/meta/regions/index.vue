@@ -33,17 +33,27 @@
         </v-icon>
       </template>
     </v-data-table>
+    <regionForm v-model="openRegionForm" :title="dialogTitle" />
+    <DetailDialog v-model="openDetailDialog" title="Region" />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { regionHeaders } from '@/utils/tableHeaders'
-
+import regionForm from '@/components/FormDialog/regionForm'
+import DetailDialog from '@/components/DetailDialog/index'
 export default {
+  components: {
+    regionForm,
+    DetailDialog
+  },
   layout: 'dashboard',
   data: () => ({
     regionHeaders,
-    search: ''
+    search: '',
+    openRegionForm: false,
+    openDetailDialog: false,
+    dialogTitle: ''
   }),
   async fetch ({ store }) {
     await store.dispatch('region/get_regions')
@@ -57,7 +67,17 @@ export default {
   },
   methods: {
     showDialog (type, item = null) {
-      console.log('fnc')
+      if (type === 'show') {
+        this.openDetailDialog = !this.openDetailDialog
+      } else {
+        if (type === 'edit') {
+          this.dialogTitle = 'Edit Region'
+        } else {
+          this.dialogTitle = 'Create Region'
+        }
+        this.$emit('openRegionForm', item)
+        this.openRegionForm = true
+      }
     }
   }
 }

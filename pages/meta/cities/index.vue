@@ -33,18 +33,27 @@
         </v-icon>
       </template>
     </v-data-table>
+    <cityForm v-model="openCityForm" :title="dialogTitle" />
+    <DetailDialog v-model="openDetailDialog" title="City" />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { cityHeaders } from '@/utils/tableHeaders'
+import cityForm from '@/components/FormDialog/cityForm'
+import DetailDialog from '@/components/DetailDialog/index'
 export default {
+  components: {
+    cityForm,
+    DetailDialog
+  },
   layout: 'dashboard',
   data: () => ({
     cityHeaders,
     search: '',
-    openForm: false,
-    dialogTitle: ''
+    openCityForm: false,
+    dialogTitle: '',
+    openDetailDialog: false
   }),
   async fetch ({ store }) {
     await store.dispatch('city/get_cities')
@@ -59,14 +68,15 @@ export default {
   methods: {
     showDialog (type, item = null) {
       if (type === 'show') {
-        this.openForm = !this.openForm
+        this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {
           this.dialogTitle = 'Edit City'
         } else {
           this.dialogTitle = 'Create City'
         }
-        this.openForm = true
+        this.$emit('openCityForm', item)
+        this.openCityForm = true
       }
     }
   }
