@@ -29,6 +29,7 @@ const Menu = [
       { name: 'regions', title: 'Regions', action: '/meta/regions', icon: 'mdi-home-city' },
       { name: 'cities', title: 'Cities', action: '/meta/cities', icon: 'mdi-home-city' },
       { name: 'townships', title: 'Townships', action: '/meta/townships', icon: 'mdi-home-city' },
+      { name: 'departments', title: 'Departments', action: '/meta/departments', icon: 'mdi-home-city' },
       { name: 'payment_methods', title: 'PaymentMethods', action: '/meta/payment_methods', icon: 'mdi-home-city' },
       { name: 'payment_types', title: 'PaymentTypes', action: '/meta/payment_types', icon: 'mdi-home-city' }
     ]

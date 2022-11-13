@@ -99,6 +99,19 @@ export const townshipHeaders = [
   },
   { text: 'Actions', value: 'actions', sortable: false }
 ]
+export const departmentHeaders = [
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name'
+  },
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name_mm'
+  },
+  { text: 'Actions', value: 'actions', sortable: false }
+]
 export const paymentMethodHeaders = [
   {
     text: 'Name',

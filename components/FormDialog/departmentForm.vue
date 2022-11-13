@@ -55,7 +55,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.$on('openCityForm', (item) => {
+    this.$parent.$on('openDepartmentForm', (item) => {
       this.model = item
     })
   }

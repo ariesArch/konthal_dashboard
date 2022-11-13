@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <v-data-table :items="payment_methods" :headers="paymentMethodHeaders">
+    <v-data-table :items="departments" :headers="departmentHeaders">
       <template #top>
         <v-toolbar flat>
           <v-text-field
@@ -33,35 +33,35 @@
         </v-icon>
       </template>
     </v-data-table>
-    <paymentMethodForm v-model="openPaymentMethodForm" :title="dialogTitle" />
-    <DetailDialog v-model="openDetailDialog" title="PaymentMethod" />
+    <departmentForm v-model="openDepartmentForm" :title="dialogTitle" />
+    <DetailDialog v-model="openDetailDialog" title="Department" />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
-import { paymentMethodHeaders } from '@/utils/tableHeaders'
-import paymentMethodForm from '@/components/FormDialog/paymentMethodFrom'
+import { departmentHeaders } from '@/utils/tableHeaders'
+import departmentForm from '@/components/FormDialog/departmentForm'
 import DetailDialog from '@/components/DetailDialog/index'
 export default {
   components: {
-    paymentMethodForm,
+    departmentForm,
     DetailDialog
   },
   layout: 'dashboard',
   data: () => ({
-    paymentMethodHeaders,
+    departmentHeaders,
     search: '',
-    openPaymentMethodForm: false,
+    openDepartmentForm: false,
     openDetailDialog: false,
     dialogTitle: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('paymentMethod/get_payment_methods')
+    await store.dispatch('department/get_departments')
   },
   computed: {
     ...mapState({
-      payment_methods: (state) => {
-        return state.paymentMethod.paymentMethods
+      departments: (state) => {
+        return state.department.departments
       }
     })
   },
@@ -71,12 +71,11 @@ export default {
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {
-          this.dialogTitle = 'Edit PaymentMethod'
+          this.dialogTitle = 'Edit Department'
         } else {
-          this.dialogTitle = 'Create PaymentMethod'
+          this.dialogTitle = 'Create Department'
         }
-        this.$emit('openPaymentMethodForm', item)
-        this.openPaymentMethodForm = true
+        this.openDepartmentForm = true
       }
     }
   }
