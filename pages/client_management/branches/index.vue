@@ -33,17 +33,27 @@
         </v-icon>
       </template>
     </v-data-table>
+    <branchForm v-model="openBranchForm" :title="dialogTitle" />
+    <DetailDialog v-model="openDetailDialog" title="Branch" />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { branchHeaders } from '@/utils/tableHeaders'
-
+import branchForm from '@/components/FormDialog/branchForm'
+import DetailDialog from '@/components/DetailDialog/index'
 export default {
+  components: {
+    branchForm,
+    DetailDialog
+  },
   layout: 'dashboard',
   data: () => ({
     branchHeaders,
-    search: ''
+    search: '',
+    openBranchForm: false,
+    dialogTitle: '',
+    openDetailDialog: false
   }),
   async fetch ({ store }) {
     await store.dispatch('branch/get_branches')
@@ -57,7 +67,17 @@ export default {
   },
   methods: {
     showDialog (type, item = null) {
-      console.log('fnc')
+      if (type === 'show') {
+        this.openDetailDialog = !this.openDetailDialog
+      } else {
+        if (type === 'edit') {
+          this.dialogTitle = 'Edit Branch'
+        } else {
+          this.dialogTitle = 'Create Branch'
+        }
+        this.$emit('openBranchForm', item)
+        this.openBranchForm = true
+      }
     }
   }
 }

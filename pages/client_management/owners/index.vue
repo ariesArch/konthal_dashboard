@@ -33,17 +33,28 @@
         </v-icon>
       </template>
     </v-data-table>
+    <ownerForm v-model="openOwnerForm" :title="dialogTitle" />
+    <DetailDialog v-model="openDetailDialog" title="Owner" />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { ownerHeaders } from '@/utils/tableHeaders'
+import ownerForm from '@/components/FormDialog/ownerForm'
+import DetailDialog from '@/components/DetailDialog/index'
 
 export default {
+  components: {
+    ownerForm,
+    DetailDialog
+  },
   layout: 'dashboard',
   data: () => ({
     ownerHeaders,
-    search: ''
+    search: '',
+    openOwnerForm: false,
+    dialogTitle: '',
+    openDetailDialog: false
   }),
   async fetch ({ store }) {
     await store.dispatch('owner/get_owners')
@@ -57,7 +68,17 @@ export default {
   },
   methods: {
     showDialog (type, item = null) {
-      console.log('fnc')
+      if (type === 'show') {
+        this.openDetailDialog = !this.openDetailDialog
+      } else {
+        if (type === 'edit') {
+          this.dialogTitle = 'Edit Owner'
+        } else {
+          this.dialogTitle = 'Create Owner'
+        }
+        this.$emit('openOwnerForm', item)
+        this.openOwnerForm = true
+      }
     }
   }
 }

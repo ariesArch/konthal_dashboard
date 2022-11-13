@@ -20,16 +20,9 @@
         <v-icon
           class="mr-2"
           color="info"
-          @click="showDialog('show',item)"
+          @click="$router.push(`/client_management/shops/${item.slug}`)"
         >
           mdi-eye
-        </v-icon>
-        <v-icon
-          class="mr-2"
-          color="info"
-          @click="showDialog('edit',item)"
-        >
-          mdi-pencil
         </v-icon>
       </template>
     </v-data-table>
