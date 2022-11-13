@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    {{ error }}
     <v-data-table :items="cities" :headers="cityHeaders">
       <template #top>
         <v-toolbar flat>
@@ -33,7 +34,7 @@
         </v-icon>
       </template>
     </v-data-table>
-    <cityForm v-model="openCityForm" :title="dialogTitle" />
+    <cityForm v-model="openCityForm" :title="dialogTitle" :regions="regions" />
     <DetailDialog v-model="openDetailDialog" title="City" />
   </div>
 </template>
@@ -56,17 +57,23 @@ export default {
     openDetailDialog: false
   }),
   async fetch ({ store }) {
-    await store.dispatch('city/get_cities')
+    await store.dispatch('city/getCities')
   },
   computed: {
     ...mapState({
       cities: (state) => {
         return state.city.cities
+      },
+      regions: (state) => {
+        return state.region.regions
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
         this.openDetailDialog = !this.openDetailDialog
       } else {
@@ -75,7 +82,7 @@ export default {
         } else {
           this.dialogTitle = 'Create City'
         }
-        this.$emit('openCityForm', item)
+        this.$emit('openCityForm', JSON.parse(JSON.stringify(item)))
         this.openCityForm = true
       }
     }

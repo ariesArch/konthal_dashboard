@@ -40,9 +40,8 @@
   </div>
 </template>
 <script>
-import localforage from 'localforage'
+// import localforage from 'localforage'
 export default {
-
   auth: 'guest',
   data: () => ({
     email: '',
@@ -72,15 +71,16 @@ export default {
         //   })
         // }
         await this.$auth.loginWith('local', { data: payload })
-        const { data, status } = (await this.$axios.get('/initial_fetch')).data
-        if (status === 1) {
-          localforage.setItem('stored:regions', data.regions)
-          localforage.setItem('stored:cities', data.cities)
-          localforage.setItem('stored:townships', data.townships)
-        }
-        this.$router.push({
-          name: 'index'
-        })
+
+        // const { data, status } = (await this.$axios.get('/initial_fetch')).data
+        // if (status === 1) {
+        // localforage.setItem('stored:regions', data.regions)
+        // localforage.setItem('stored:cities', data.cities)
+        // localforage.setItem('stored:townships', data.townships)
+        // }
+        // this.$router.push({
+        //   name: 'index'
+        // })
       } catch (err) {
         console.log(err)
       }

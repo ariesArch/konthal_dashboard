@@ -13,34 +13,49 @@ export const mutations = {
 }
 
 export const actions = {
-  async get_cities ({ commit }) {
-    const res = await this.$repositories.city.all()
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      commit('SET_CITIES', data.data)
-    } else {
-    // Handle error here
-    }
+  async getCities ({ commit }) {
+    // const res = await this.$baseRepository.all('cities')
+    // const { status, data } = res
+    // if (status === 200 && data.status === 1 && data.data) {
+    //   commit('SET_CITIES', data.data)
+    // } else {
+    // // Handle error here
+    // }
+    // await this.$baseRepository.all('cities', 'city/SET_CITIES')
+    // await this.$baseRepository.all('cities', (data) => {
+    //   commit('SET_CITIES', data)
+    // })
+    // await this.$baseRepository.all('cities', (res) => {
+    //   if (res.status === 200 && res.data.status === 1 && res.data.data) {
+    //     commit('SET_CITIES', res.data.data)
+    //   } else {
+    //     alert('eRRor')
+    //     // Handle error here
+    //   }
+    // })
+    await this.$baseRepository.all('cities', (data) => {
+      commit('SET_CITIES', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
-  async get_city ({ commit }, city) {
-    const res = await this.$repositories.city.show(city)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      commit('SET_CITY', data.data)
-    } else {
-      // Handle error here
-    }
+  // async getCity ({ commit }, city) {
+  //   const res = await this.$repositories.city.show(city)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //     commit('SET_CITY', data.data)
+  //   } else {
+  //     // Handle error here
+  //   }
+  // },
+  async createCity ({ commit }, payload) {
+    await this.$baseRepository.create('cities', payload, (data) => {
+      commit('SET_CITY', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
-  async create_city ({ commit }, city) {
-    const res = await this.$repositories.city.create(city)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      commit('SET_CITY', data.data)
-    } else {
-      // Handle error here
-    }
-  },
-  async update_city ({ commit }, id, city) {
+  async updateCity ({ commit }, id, city) {
     const res = await this.$repositories.city.update(id, city)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -49,7 +64,7 @@ export const actions = {
       // Handle error here
     }
   },
-  async delete_city ({ commit }, id) {
+  async deleteCity ({ commit }, id) {
     const res = await this.$repositories.city.delete(id)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {

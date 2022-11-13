@@ -13,18 +13,22 @@ export const mutations = {
 }
 
 export const actions = {
-  async get_shops ({ commit }) {
-    const res = await this.$repositories.shop.all()
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      //   const { shops } = data.data
-      commit('SET_SHOPS', data.data)
-    } else {
-      // Handle error here
-    }
+  async getShops ({ commit }) {
+    // const res = await this.$repositories.shop.all('shops')
+    // const { status, data } = res
+    // if (status === 200 && data.status === 1 && data.data) {
+    //   commit('SET_SHOPS', data.data)
+    // } else {
+    //   // Handle error here
+    // }
+    await this.$baseRepository.all('shopds', (data) => {
+      commit('SET_SHOPS', data)
+    }, ({ error }) => {
+      commit('SET_ERROR', error, { root: true })
+    })
   },
 
-  async get_shop ({ commit }, shop) {
+  async getShop ({ commit }, shop) {
     const res = await this.$repositories.shop.show(shop)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -35,7 +39,7 @@ export const actions = {
     }
   },
 
-  async create_shop ({ commit }, shop) {
+  async createShop ({ commit }, shop) {
     const res = await this.$repositories.shop.create(shop)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -46,7 +50,7 @@ export const actions = {
     }
   },
 
-  async update_shop ({ commit }, id, shop) {
+  async updateShop ({ commit }, id, shop) {
     const res = await this.$repositories.shop.update(id, shop)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -57,7 +61,7 @@ export const actions = {
     }
   },
 
-  async delete_shop ({ commit }, id) {
+  async deleteShop ({ commit }, id) {
     const res = await this.$repositories.shop.delete(id)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {

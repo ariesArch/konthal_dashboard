@@ -39,12 +39,15 @@ export default {
     search: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('shop/get_shops')
+    await store.dispatch('shop/getShops')
   },
   computed: {
     ...mapState({
       shops: (state) => {
         return state.shop.shops
+      },
+      cities: (state) => {
+        return state.city.cities
       }
     })
   },

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import formButton from '@/components/button/formButton.vue'
 import DetailDialog from '@/components/DetailDialog'
+import ErrorSnackBar from '@/components/base/ErrorSnackBar'
 Vue.mixin({
   computed: {
     isOpenForm: {
@@ -36,13 +37,6 @@ Vue.mixin({
   },
   methods: {
     async fetchList (that, URL) {
-    //   return that.$axios.get(URL)
-    //   const { data, status, message } = (await that.$axios.get(URL)).data
-    //   if (status === 1) {
-    //     that.list = data
-    //   } else {
-    //     console.log(message)
-    //   }
       that.isFetching = true
       try {
         const { data, status } = (await that.$axios.get(URL)).data
@@ -77,6 +71,13 @@ Vue.mixin({
         console.log('Handlingerror' + error.message)
       }
       that.isFetching = false
+    },
+    async validateFormData (that) {
+      that.isSubmitting = true
+      const isErrorFree = await that.$refs.observer.validate()
+      if (!isErrorFree) {
+        that.isSubmitting = false
+      }
     }
     // async postDialogData (that, URL, payload, intendedList = null) {
     //   that.isSubmitting = true
@@ -125,3 +126,4 @@ Vue.mixin({
 })
 Vue.component('FormButton', formButton)
 Vue.component('DetailDialog', DetailDialog)
+Vue.component('ErrorSnackBar', ErrorSnackBar)

@@ -12,7 +12,7 @@ export const mutations = {
   }
 }
 export const actions = {
-  async get_townships ({ commit }) {
+  async getTownships ({ commit }) {
     const res = await this.$repositories.township.all()
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {

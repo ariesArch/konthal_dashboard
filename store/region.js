@@ -12,7 +12,7 @@ export const mutations = {
   }
 }
 export const actions = {
-  async get_regions ({ commit }) {
+  async getRegions ({ commit }) {
     const res = await this.$repositories.region.all()
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
