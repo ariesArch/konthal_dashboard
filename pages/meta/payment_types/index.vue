@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    {{ error }}
     <v-data-table :items="payment_types" :headers="paymentTypeHeaders">
       <template #top>
         <v-toolbar flat>
@@ -56,17 +57,20 @@ export default {
     dialogTitle: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('paymentType/get_payment_types')
+    await store.dispatch('paymentType/getPaymentTypes')
   },
   computed: {
     ...mapState({
       payment_types: (state) => {
         return state.paymentType.paymentTypes
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
         this.openDetailDialog = !this.openDetailDialog
       } else {
@@ -75,7 +79,7 @@ export default {
         } else {
           this.dialogTitle = 'Create PaymentType'
         }
-        this.$emit('openPaymentTypeForm', item)
+        this.$emit('openPaymentTypeForm', JSON.parse(JSON.stringify(item)))
         this.openPaymentTypeForm = true
       }
     }

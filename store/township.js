@@ -13,17 +13,22 @@ export const mutations = {
 }
 export const actions = {
   async getTownships ({ commit }) {
-    const res = await this.$repositories.township.all()
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { townships } = data.data
-      commit('SET_TOWNSHIPS', data.data)
-    } else {
-    // Handle error here
-    }
+    // const res = await this.$repositories.township.all()
+    // const { status, data } = res
+    // if (status === 200 && data.status === 1 && data.data) {
+    // //   const { townships } = data.data
+    //   commit('SET_TOWNSHIPS', data.data)
+    // } else {
+    // // Handle error here
+    // }
+    await this.$baseRepository.all('townships', (data) => {
+      commit('SET_TOWNSHIPS', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
-  async get_township ({ commit }, township) {
+  async getTownship ({ commit }, township) {
     const res = await this.$repositories.township.show(township)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -34,18 +39,15 @@ export const actions = {
     }
   },
 
-  async create_township ({ commit }, township) {
-    const res = await this.$repositories.township.create(township)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { township } = data
-      commit('SET_TOWNSHIP', data.data)
-    } else {
-    // Handle error here
-    }
+  async createTownship ({ commit }, payload) {
+    await this.$baseRepository.create('townships', payload, (data) => {
+      commit('SET_TOWNSHIP', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
-  async update_township ({ commit }, id, township) {
+  async updateTownship ({ commit }, id, township) {
     const res = await this.$repositories.township.update(id, township)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -56,7 +58,7 @@ export const actions = {
     }
   },
 
-  async delete_township ({ commit }, id) {
+  async deleteTownship ({ commit }, id) {
     const res = await this.$repositories.township.delete(id)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {

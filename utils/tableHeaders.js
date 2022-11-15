@@ -123,6 +123,11 @@ export const paymentMethodHeaders = [
     align: 'start',
     value: 'name_mm'
   },
+  {
+    text: 'Description',
+    align: 'start',
+    value: 'description'
+  },
   { text: 'Actions', value: 'actions', sortable: false }
 ]
 export const paymentTypeHeaders = [

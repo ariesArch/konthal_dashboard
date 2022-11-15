@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    {{ error }}
     <v-data-table :items="townships" :headers="townshipHeaders">
       <template #top>
         <v-toolbar flat>
@@ -33,7 +34,7 @@
         </v-icon>
       </template>
     </v-data-table>
-    <townshipForm v-model="openTownshipForm" :title="dialogTitle" />
+    <townshipForm v-model="openTownshipForm" :title="dialogTitle" :cities="cities" />
     <DetailDialog v-model="openDetailDialog" title="Township" />
   </div>
 </template>
@@ -56,17 +57,23 @@ export default {
     dialogTitle: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('township/get_townships')
+    await store.dispatch('township/getTownships')
   },
   computed: {
     ...mapState({
       townships: (state) => {
         return state.township.townships
+      },
+      cities: (state) => {
+        return state.city.cities
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
         this.openDetailDialog = !this.openDetailDialog
       } else {
@@ -75,7 +82,7 @@ export default {
         } else {
           this.dialogTitle = 'Create Township'
         }
-        this.$emit('openTownshipForm', item)
+        this.$emit('openTownshipForm', JSON.parse(JSON.stringify(item)))
         this.openTownshipForm = true
       }
     }
