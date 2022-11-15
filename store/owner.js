@@ -13,7 +13,7 @@ export const mutations = {
 }
 
 export const actions = {
-  async get_owners ({ commit }) {
+  async getOwners ({ commit }) {
     const res = await this.$repositories.owner.all()
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -24,46 +24,53 @@ export const actions = {
     }
   },
 
-  async get_shop ({ commit }, owner) {
-    const res = await this.$repositories.owner.show(owner)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { owner } = data
-      commit('SET_OWNER', data.data)
-    } else {
-      // Handle error here
-    }
-  },
+  // async getOwner ({ commit }, owner) {
+  //   const res = await this.$repositories.owner.show(owner)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //   //   const { owner } = data
+  //     commit('SET_OWNER', data.data)
+  //   } else {
+  //     // Handle error here
+  //   }
+  // },
 
-  async create_owner ({ commit }, owner) {
-    const res = await this.$repositories.owner.create(owner)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { owner } = data
-      commit('SET_OWNER', data.data)
-    } else {
-      // Handle error here
-    }
-  },
-
-  async update_owner ({ commit }, id, owner) {
-    const res = await this.$repositories.owner.update(id, owner)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { owner } = data
-      commit('SET_OWNER', data.data)
-    } else {
-      // Handle error here
-    }
-  },
-
-  async delete_owner ({ commit }, id) {
-    const res = await this.$repositories.owner.delete(id)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      // Remove from store
-    } else {
-      // Handle error here
-    }
+  // async createOwner ({ commit }, owner) {
+  //   const res = await this.$repositories.owner.create(owner)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //   //   const { owner } = data
+  //     commit('SET_OWNER', data.data)
+  //   } else {
+  //     // Handle error here
+  //   }
+  // }
+  async createOwner ({ commit }, payload) {
+    await this.$baseRepository.create('owners', payload, (data) => {
+      commit('SET_OWNER', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   }
+
+  // async updateOwner ({ commit }, id, owner) {
+  //   const res = await this.$repositories.owner.update(id, owner)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //   //   const { owner } = data
+  //     commit('SET_OWNER', data.data)
+  //   } else {
+  //     // Handle error here
+  //   }
+  // },
+
+  // async deleteOwner ({ commit }, id) {
+  //   const res = await this.$repositories.owner.delete(id)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //     // Remove from store
+  //   } else {
+  //     // Handle error here
+  //   }
+  // }
 }

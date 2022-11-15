@@ -26,20 +26,37 @@
         </v-icon>
       </template>
     </v-data-table>
+    <shopForm
+      v-model="openShopForm"
+      :title="dialogTitle"
+      :cities="cities"
+      :townships="townships"
+      :owners="owners"
+      :shoptypes="shopTypes"
+    />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { shopHeaders } from '@/utils/tableHeaders'
+import shopForm from '@/components/FormDialog/shopForm'
 
 export default {
+  components: {
+    shopForm
+
+  },
   layout: 'dashboard',
   data: () => ({
     shopHeaders,
-    search: ''
+    search: '',
+    openShopForm: false,
+    dialogTitle: ''
   }),
   async fetch ({ store }) {
     await store.dispatch('shop/getShops')
+    await store.dispatch('shopType/getShopTypes')
+    await store.dispatch('owner/getOwners')
   },
   computed: {
     ...mapState({
@@ -48,13 +65,37 @@ export default {
       },
       cities: (state) => {
         return state.city.cities
+      },
+      townships: (state) => {
+        return state.township.townships
+      },
+      owners: (state) => {
+        return state.owner.owners
+      },
+      shopTypes: (state) => {
+        return state.shopType.shopTypes
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
-      console.log('fnc')
+    showDialog (type = null, item = {}) {
+      this.dialogTitle = 'Create Shop'
+      this.$emit('openShopForm', JSON.parse(JSON.stringify(item)))
+      this.openShopForm = true
     }
+  //   showDialog (type, item = {}) {
+  //     if (type === 'edit') {
+  //       this.dialogTitle = 'Edit Shop'
+  //     } else {
+  //       this.dialogTitle = 'Create Shop'
+  //     }
+  //     this.$emit('openShopForm', JSON.parse(JSON.stringify(item)))
+  //     this.openShopForm = true
+  //   }
   }
 }
+
 </script>
