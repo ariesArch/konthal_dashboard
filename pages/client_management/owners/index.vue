@@ -33,7 +33,7 @@
         </v-icon>
       </template>
     </v-data-table>
-    <ownerForm v-model="openOwnerForm" :title="dialogTitle" />
+    <ownerForm v-model="openOwnerForm" :title="dialogTitle" :cities="cities" :townships="townships" />
     <DetailDialog v-model="openDetailDialog" title="Owner" />
   </div>
 </template>
@@ -57,17 +57,23 @@ export default {
     openDetailDialog: false
   }),
   async fetch ({ store }) {
-    await store.dispatch('owner/get_owners')
+    await store.dispatch('owner/getOwners')
   },
   computed: {
     ...mapState({
       owners: (state) => {
         return state.owner.owners
+      },
+      cities: (state) => {
+        return state.city.cities
+      },
+      townships: (state) => {
+        return state.township.townships
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
         this.openDetailDialog = !this.openDetailDialog
       } else {
@@ -76,7 +82,7 @@ export default {
         } else {
           this.dialogTitle = 'Create Owner'
         }
-        this.$emit('openOwnerForm', item)
+        this.$emit('openOwnerForm', JSON.parse(JSON.stringify(item)))
         this.openOwnerForm = true
       }
     }
