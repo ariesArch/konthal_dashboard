@@ -218,7 +218,14 @@
       </v-col>
     </v-row>
     <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Branch" />
-    <branchForm v-model="openBranchForm" :title="dialogTitle" :cities="cities" :townships="townships" />
+    <branchForm
+      v-model="openBranchForm"
+      :title="dialogTitle"
+      :cities="cities"
+      :townships="townships"
+      :shops="shops"
+      :shoptypes="shopTypes"
+    />
     <productForm v-model="openProductForm" :title="dialogTitle" :categories="categories" :brands="brands" />
   </div>
 </template>
@@ -239,8 +246,6 @@ export default {
   layout: 'dashboard',
   data: () => ({
     detail: {},
-    cities: [],
-    townships: [],
     shop_types: [],
     shopId: '',
     shopInfo: {},
@@ -258,6 +263,11 @@ export default {
     openProductForm: false,
     product: []
   }),
+  async fetch ({ store }) {
+    await store.dispatch('branch/getBranches')
+    await store.dispatch('shop/getShops')
+    await store.dispatch('shopType/getShopTypes')
+  },
   computed: {
     ...mapState({
       categories: (state) => {
@@ -265,12 +275,30 @@ export default {
       },
       brands: (state) => {
         return state.brand.brands
+      },
+      branches: (state) => {
+        return state.branch.branches
+      },
+      cities: (state) => {
+        return state.city.cities
+      },
+      townships: (state) => {
+        return state.township.townships
+      },
+      shops: (state) => {
+        return state.shop.shops
+      },
+      shopTypes: (state) => {
+        return state.shopType.shopTypes
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   watch: {
     detail (newVal, oldVal) {
-      this.shopInfo = (({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township }) => ({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township }))(newVal)
+      this.shopInfo = (({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township, branches }) => ({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township, branches }))(newVal)
       this.list = newVal.branches
       this.product = newVal.products
       this.shopPayload = (({ name, name_mm, phone_number, address, description, owner, shop_type, city, township }) => ({ name, name_mm, phone_number, address, description, owner_id: owner.id, shop_type_id: shop_type.id, city_id: city.id, township_id: township.id }))(newVal)
@@ -307,6 +335,7 @@ export default {
         this.dialogTitle = 'Create Branch'
       } else {
         this.selectedItem.shop_id = this.shopInfo.id
+        this.selectedItem.branch_id = this.shopInfo.branches[0].id
         this.$emit('openProductForm', this.selectedItem)
         this.openProductForm = true
         this.dialogTitle = 'Create Product'
@@ -336,23 +365,6 @@ export default {
         this.$emit('openProductForm', this.selectedItem)
         this.openProductForm = true
         this.dialogTitle = 'Edit Product'
-      }
-    },
-    showDialog (type, title, item = null) {
-      if (type === 'show') {
-        this.selectedItem = (({ name, name_mm, city, township, phone_number, address, description }) => ({ name, name_mm, city_name: city.name, township_name: township.name, phone_number, address, description }))(item)
-        this.openDetailDialog = true
-      } else {
-        if (item !== null) {
-          this.selectedItem = (({ id, name, name_mm, city, township, phone_number, address, description }) => ({ id, name, name_mm, city_id: city.id, township_id: township.id, phone_number, address, description }))(item)
-          this.dialogTitle = `Edit ${title}`
-        } else {
-          this.dialogTitle = `Create ${title}`
-        }
-        this.selectedItem.shop_id = this.shopInfo.id
-        this.selectedItem.shop_type_id = this.shopInfo.shop_type.id
-        this.$emit('openBranchForm', this.selectedItem)
-        this.openBranchForm = true
       }
     }
   }

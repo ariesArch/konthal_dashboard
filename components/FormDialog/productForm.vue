@@ -7,7 +7,7 @@
     >
       <v-card>
         <v-card-title>
-          {{ title }} - {{ model.name }}
+          {{ title }} - {{ model.name }}={{ model }}
         </v-card-title>
 
         <v-form @submit.prevent="submitForm">
