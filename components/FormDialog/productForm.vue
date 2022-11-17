@@ -13,6 +13,17 @@
         <v-form @submit.prevent="submitForm">
           <validation-observer ref="observer">
             <v-card-text>
+              <validation-provider v-slot="{errors}" rules="required" name="Branch">
+                <v-autocomplete
+                  v-model="model.branch_id"
+                  :items="branches"
+                  item-text="name"
+                  item-value="id"
+                  outlined
+                  :error-messages="errors"
+                  label="Branch"
+                />
+              </validation-provider>
               <validation-provider v-slot="{errors}" rules="required" name="Category">
                 <v-autocomplete
                   v-model="model.category_id"
@@ -100,6 +111,10 @@ export default {
       default: () => ([])
     },
     brands: {
+      type: Array,
+      default: () => ([])
+    },
+    branches: {
       type: Array,
       default: () => ([])
     }

@@ -21,6 +21,7 @@ export default {
     await this.$store.dispatch('township/getTownships')
     await this.$store.dispatch('category/getCategories')
     await this.$store.dispatch('brand/getBrands')
+    await this.$store.dispatch('branch/getBranches')
     // await this.$store.dispatch('shop/getShops')
     // await this.$store.dispatch('shopType/getShopTypes')
     // await this.$store.dispatch('owner/getOwners')

@@ -52,8 +52,17 @@ export default ($axios, store) => ({
     }
   },
 
-  update (resource, id, payload) {
-    return $axios.post(`${resource}/${id}`, payload)
+  async update (resource, payload, resolve, reject) {
+    try {
+      const { data, status, message } = (await $axios.put(`${resource}`, payload)).data
+      if (status === 1 && data) {
+        resolve(data)
+      } else {
+        reject({ status, message })
+      }
+    } catch (error) {
+      reject(error)
+    }
   },
 
   delete (resource, id) {

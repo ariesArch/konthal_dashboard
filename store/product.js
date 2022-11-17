@@ -48,14 +48,11 @@ export const actions = {
   },
 
   async updateProduct ({ commit }, id, product) {
-    const res = await this.$repositories.product.update(id, product)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { product } = data
-      commit('SET_PRODUCT', data.data)
-    } else {
-    // Handle error here
-    }
+    await this.$repositories.product.update(`${id}`, product, (data) => {
+      commit('SET_PRODUCT', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
   async deleteProduct ({ commit }, id) {

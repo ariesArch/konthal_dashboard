@@ -226,7 +226,7 @@
       :shops="shops"
       :shoptypes="shopTypes"
     />
-    <productForm v-model="openProductForm" :title="dialogTitle" :categories="categories" :brands="brands" />
+    <productForm v-model="openProductForm" :title="dialogTitle" :branches="branches" :categories="categories" :brands="brands" />
   </div>
 </template>
 <script>
@@ -249,7 +249,6 @@ export default {
     shop_types: [],
     shopId: '',
     shopInfo: {},
-    branches: [],
     branchHeaders,
     productHeaders,
     isEditing: false,
@@ -261,10 +260,10 @@ export default {
     openDetailDialog: false,
     dialogTitle: '',
     openProductForm: false,
-    product: []
+    product: [],
+    branch_id: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('branch/getBranches')
     await store.dispatch('shop/getShops')
     await store.dispatch('shopType/getShopTypes')
   },
@@ -335,7 +334,6 @@ export default {
         this.dialogTitle = 'Create Branch'
       } else {
         this.selectedItem.shop_id = this.shopInfo.id
-        this.selectedItem.branch_id = this.shopInfo.branches[0].id
         this.$emit('openProductForm', this.selectedItem)
         this.openProductForm = true
         this.dialogTitle = 'Create Product'
@@ -346,7 +344,7 @@ export default {
         this.selectedItem = (({ name, name_mm, city, township, phone_number, address, description }) => ({ name, name_mm, city_name: city.name, township_name: township.name, phone_number, address, description }))(item)
         this.dialogTitle = 'Branch'
       } else {
-        this.selectedItem = (({ name, name_mm, price, category, brand }) => ({ name, name_mm, price, category_name: category.name, brand_name: brand.name }))(item)
+        this.selectedItem = (({ name, name_mm, price, branch, category, brand }) => ({ name, name_mm, price, branch_name: branch.name, category_name: category.name, brand_name: brand.name }))(item)
         this.dialogTitle = 'Product'
       }
       this.openDetailDialog = true
@@ -360,7 +358,8 @@ export default {
         this.openBranchForm = true
         this.dialogTitle = 'Edit Branch'
       } else {
-        this.selectedItem = (({ id, name, name_mm, price }) => ({ id, name, name_mm, price }))(item)
+        this.selectedItem = (({ id, name, name_mm, price, category, brand }) => ({ id, name, name_mm, price, category_id: category.id, brand_id: brand.id }))(item)
+        this.selectedItem.branch_id = item.branch_id
         this.selectedItem.shop_id = this.shopInfo.id
         this.$emit('openProductForm', this.selectedItem)
         this.openProductForm = true
