@@ -35,7 +35,7 @@
       </template>
     </v-data-table>
     <townshipForm v-model="openTownshipForm" :title="dialogTitle" :cities="cities" />
-    <DetailDialog v-model="openDetailDialog" title="Township" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Township" />
   </div>
 </template>
 <script>
@@ -54,6 +54,7 @@ export default {
     search: '',
     openTownshipForm: false,
     openDetailDialog: false,
+    selectedItem: {},
     dialogTitle: ''
   }),
   async fetch ({ store }) {
@@ -75,6 +76,7 @@ export default {
   methods: {
     showDialog (type, item = {}) {
       if (type === 'show') {
+        this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {

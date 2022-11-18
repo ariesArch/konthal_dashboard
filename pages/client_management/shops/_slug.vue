@@ -217,7 +217,7 @@
         />
       </v-col>
     </v-row>
-    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Branch" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" />
     <branchForm
       v-model="openBranchForm"
       :title="dialogTitle"
@@ -344,7 +344,7 @@ export default {
         this.selectedItem = (({ name, name_mm, city, township, phone_number, address, description }) => ({ name, name_mm, city_name: city.name, township_name: township.name, phone_number, address, description }))(item)
         this.dialogTitle = 'Branch'
       } else {
-        this.selectedItem = (({ name, name_mm, price, branch, category, brand }) => ({ name, name_mm, price, branch_name: branch.name, category_name: category.name, brand_name: brand.name }))(item)
+        this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
         this.dialogTitle = 'Product'
       }
       this.openDetailDialog = true

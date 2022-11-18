@@ -48,14 +48,11 @@ export const actions = {
   },
 
   async updateRegion ({ commit }, id, region) {
-    const res = await this.$repositories.region.update(id, region)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { region } = data
-      commit('SET_REGION', data.data)
-    } else {
-    // Handle error here
-    }
+    await this.$repositories.region.update(`regions/${id}`, region, (data) => {
+      commit('SET_REGION', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
   async deleteRegion ({ commit }, id) {

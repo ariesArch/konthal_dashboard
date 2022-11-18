@@ -48,14 +48,11 @@ export const actions = {
   },
 
   async updatePaymentMethod ({ commit }, id, paymentMethod) {
-    const res = await this.$repositories.payment_method.update(id, paymentMethod)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { paymentMethod } = data
-      commit('SET_PAYMENTMETHOD', data.data)
-    } else {
-    // Handle error here
-    }
+    await this.$repositories.payment_method.update(`payment_methods/${id}`, paymentMethod, (data) => {
+      commit('SET_PAYMENTMETHOD', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
   async deletePaymentMethod ({ commit }, id) {

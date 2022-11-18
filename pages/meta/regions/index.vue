@@ -35,7 +35,7 @@
       </template>
     </v-data-table>
     <regionForm v-model="openRegionForm" :title="dialogTitle" />
-    <DetailDialog v-model="openDetailDialog" title="Region" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Region" />
   </div>
 </template>
 <script>
@@ -54,6 +54,7 @@ export default {
     search: '',
     openRegionForm: false,
     openDetailDialog: false,
+    selectedItem: {},
     dialogTitle: ''
   }),
   async fetch ({ store }) {
@@ -72,6 +73,7 @@ export default {
   methods: {
     showDialog (type, item = {}) {
       if (type === 'show') {
+        this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {

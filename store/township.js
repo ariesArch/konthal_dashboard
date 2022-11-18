@@ -48,14 +48,11 @@ export const actions = {
   },
 
   async updateTownship ({ commit }, id, township) {
-    const res = await this.$repositories.township.update(id, township)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { township } = data
-      commit('SET_TOWNSHIP', data.data)
-    } else {
-    // Handle error here
-    }
+    await this.$repositories.township.update(`townships/${id}`, township, (data) => {
+      commit('SET_TOWNSHIP', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
   async deleteTownship ({ commit }, id) {
