@@ -102,8 +102,9 @@ export default {
       await this.validateFormData(this)
       if (this.model.id) {
         this.$store.dispatch('township/updateTownship', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('township/createTownship', this.model)
       }
-      this.$store.dispatch('township/createTownship', this.model)
       this.isOpenForm = false
     }
   }

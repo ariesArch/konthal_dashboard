@@ -122,8 +122,9 @@ export default {
       await this.validateFormData(this)
       if (this.model.id) {
         this.$store.dispatch('providerBranch/updateProviderBranch', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('providerBranch/createProviderBranch', this.model)
       }
-      this.$store.dispatch('providerBranch/createProviderBranch', this.model)
       this.isOpenForm = false
     }
   }

@@ -92,8 +92,9 @@ export default {
       await this.validateFormData(this)
       if (this.model.id) {
         this.$store.dispatch('department/updateDepartment', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('department/createDepartment', this.model)
       }
-      this.$store.dispatch('department/createDepartment', this.model)
       this.isOpenForm = false
     }
   }

@@ -95,8 +95,9 @@ export default {
       await this.validateFormData(this)
       if (this.model.id) {
         this.$store.dispatch('paymentMethod/updatePaymentMethod', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('paymentMethod/createPaymentMethod', this.model)
       }
-      this.$store.dispatch('paymentMethod/createPaymentMethod', this.model)
       this.isOpenForm = false
     }
   }

@@ -158,8 +158,9 @@ export default {
       await this.validateFormData(this)
       if (this.model.id) {
         this.$store.dispatch('owner/updateOwner', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('owner/createOwner', this.model)
       }
-      this.$store.dispatch('owner/createOwner', this.model)
       this.isOpenForm = false
     }
   }
