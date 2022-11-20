@@ -56,7 +56,7 @@ export const actions = {
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })
     })
-  }
+  },
 
   // async updateBranch ({ commit }, id, branch) {
   //   const res = await this.$repositories.branch.update(id, branch)
@@ -78,4 +78,11 @@ export const actions = {
   //     // Handle error here
   //   }
   // }
+  async updateBranch ({ commit }, id, branch) {
+    await this.$repositories.branch.update(id, branch, (data) => {
+      commit('SET_BRANCH', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
+  }
 }

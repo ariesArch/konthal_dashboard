@@ -398,13 +398,20 @@ export default {
         this.$emit('openBranchForm', this.selectedItem)
         this.openBranchForm = true
         this.dialogTitle = 'Edit Branch'
-      } else {
-        this.selectedItem = (({ id, name, name_mm, price, category, brand }) => ({ id, name, name_mm, price, category_id: category.id, brand_id: brand.id }))(item)
-        this.selectedItem.branch_id = item.branch_id
+      } else if (title === 'Products') {
+        this.selectedItem = (({ id, name, name_mm, price, category, brand, branch }) => ({ id, name, name_mm, price, category_id: category.id, brand_id: brand.id, branch_id: branch.id }))(item)
+        // this.selectedItem.branch_id = item.branch_id
         this.selectedItem.shop_id = this.shopInfo.id
         this.$emit('openProductForm', this.selectedItem)
         this.openProductForm = true
         this.dialogTitle = 'Edit Product'
+      } else {
+        this.selectedItem = (({ id, name, username, email, password, address, phone_number, city, township, branch, shop_department }) => ({ id, name, username, email, password, address, phone_number, city_id: city.id, township_id: township.id, branch_id: branch.id, shop_department_id: shop_department.id }))(item)
+        // this.selectedItem.branch_id = item.branch_id
+        this.selectedItem.shop_id = this.shopInfo.id
+        this.$emit('openShopStaffForm', this.selectedItem)
+        this.openShopStaffForm = true
+        this.dialogTitle = 'Edit ShopStaff'
       }
     }
   }

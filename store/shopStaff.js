@@ -34,6 +34,13 @@ export const actions = {
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })
     })
+  },
+  async updateShopStaff ({ commit }, id, shopStaff) {
+    await this.$repositories.shop_staff.update(id, shopStaff, (data) => {
+      commit('SET_SHOPSTAFF', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   }
 
 }
