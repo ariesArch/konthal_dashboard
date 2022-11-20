@@ -21,53 +21,60 @@ export const actions = {
     // } else {
     //   // Handle error here
     // }
-    await this.$baseRepository.all('shopds', (data) => {
+    await this.$baseRepository.all('shops', (data) => {
       commit('SET_SHOPS', data)
     }, ({ error }) => {
       commit('SET_ERROR', error, { root: true })
     })
   },
 
-  async getShop ({ commit }, shop) {
-    const res = await this.$repositories.shop.show(shop)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { shop } = data
-      commit('SET_SHOP', data.data)
-    } else {
-      // Handle error here
-    }
-  },
+  // async getShop ({ commit }, shop) {
+  //   const res = await this.$repositories.shop.show(shop)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //   //   const { shop } = data
+  //     commit('SET_SHOP', data.data)
+  //   } else {
+  //     // Handle error here
+  //   }
+  // },
 
-  async createShop ({ commit }, shop) {
-    const res = await this.$repositories.shop.create(shop)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { shop } = data
-      commit('SET_SHOP', data.data)
-    } else {
-      // Handle error here
-    }
-  },
-
-  async updateShop ({ commit }, id, shop) {
-    const res = await this.$repositories.shop.update(id, shop)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { shop } = data
-      commit('SET_SHOP', data.data)
-    } else {
-      // Handle error here
-    }
-  },
-
-  async deleteShop ({ commit }, id) {
-    const res = await this.$repositories.shop.delete(id)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      // Remove from store
-    } else {
-      // Handle error here
-    }
+  // async createShop ({ commit }, shop) {
+  //   const res = await this.$repositories.shop.create(shop)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //   //   const { shop } = data
+  //     commit('SET_SHOP', data.data)
+  //   } else {
+  //     // Handle error here
+  //   }
+  // },
+  async createShop ({ commit }, payload) {
+    await this.$baseRepository.create('shops', payload, (data) => {
+      commit('SET_SHOP', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   }
+
+  // async updateShop ({ commit }, id, shop) {
+  //   const res = await this.$repositories.shop.update(id, shop)
+  //   const { status, data } = res
+  //   if (status === 200 && data.status === 1 && data.data) {
+  //   //   const { shop } = data
+  //     commit('SET_SHOP', data.data)
+  //   } else {
+  //     // Handle error here
+  //   }
+  // },
+
+//   async deleteShop ({ commit }, id) {
+//     const res = await this.$repositories.shop.delete(id)
+//     const { status, data } = res
+//     if (status === 200 && data.status === 1 && data.data) {
+//       // Remove from store
+//     } else {
+//       // Handle error here
+//     }
+//   }
 }

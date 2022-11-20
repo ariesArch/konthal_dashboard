@@ -7,11 +7,45 @@
     >
       <v-card>
         <v-card-title>
-          {{ title }}
+          {{ title }} - {{ model.name }}={{ model }}
         </v-card-title>
+
         <v-form @submit.prevent="submitForm">
           <validation-observer ref="observer">
             <v-card-text>
+              <validation-provider v-slot="{errors}" rules="required" name="Branch">
+                <v-autocomplete
+                  v-model="model.branch_id"
+                  :items="branches"
+                  item-text="name"
+                  item-value="id"
+                  outlined
+                  :error-messages="errors"
+                  label="Branch"
+                />
+              </validation-provider>
+              <validation-provider v-slot="{errors}" rules="required" name="Category">
+                <v-autocomplete
+                  v-model="model.category_id"
+                  :items="categories"
+                  item-text="name"
+                  item-value="id"
+                  outlined
+                  :error-messages="errors"
+                  label="Category"
+                />
+              </validation-provider>
+              <validation-provider v-slot="{errors}" rules="required" name="Brand">
+                <v-autocomplete
+                  v-model="model.brand_id"
+                  :items="brands"
+                  item-text="name"
+                  item-value="id"
+                  outlined
+                  :error-messages="errors"
+                  label="Brand"
+                />
+              </validation-provider>
               <validation-provider v-slot="{errors}" rules="required" name="Name">
                 <v-text-field
                   v-model="model.name"
@@ -28,12 +62,12 @@
                   label="NameMM"
                 />
               </validation-provider>
-              <validation-provider v-slot="{errors}" rules="required" name="Description">
+              <validation-provider v-slot="{errors}" rules="required" name="Price">
                 <v-text-field
-                  v-model="model.description"
+                  v-model="model.price"
                   outlined
                   :error-messages="errors"
-                  label="Description"
+                  label="Price"
                 />
               </validation-provider>
             </v-card-text>
@@ -61,6 +95,7 @@
   </div>
 </template>
 <script>
+// import localforage from 'localforage'
 export default {
   props: {
     value: {
@@ -70,6 +105,18 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    categories: {
+      type: Array,
+      default: () => ([])
+    },
+    brands: {
+      type: Array,
+      default: () => ([])
+    },
+    branches: {
+      type: Array,
+      default: () => ([])
     }
   },
   data: () => ({
@@ -86,7 +133,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.$on('openPaymentMethodForm', (item) => {
+    this.$parent.$on('openProductForm', (item) => {
       this.model = item
     })
   },
@@ -94,9 +141,9 @@ export default {
     async submitForm () {
       await this.validateFormData(this)
       if (this.model.id) {
-        this.$store.dispatch('paymentMethod/updatePaymentMethod', this.model.id, this.model)
+        this.$store.dispatch('product/updateProduct', this.model.id, this.model)
       } else {
-        this.$store.dispatch('paymentMethod/createPaymentMethod', this.model)
+        this.$store.dispatch('product/createProduct', this.model)
       }
       this.isOpenForm = false
     }

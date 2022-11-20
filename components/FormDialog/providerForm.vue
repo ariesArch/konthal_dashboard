@@ -60,14 +60,13 @@
               <v-btn
                 color="primary"
                 outlined
-                @click="cancelDialog"
+                @click="isOpenForm=false"
               >
                 Cancel
               </v-btn>
               <v-btn
                 color="primary"
                 type="submit"
-                :disabled="isSubmitting"
               >
                 Submit
               </v-btn>
@@ -101,9 +100,18 @@ export default {
     }
   },
   data: () => ({
-    isSubmitting: false,
     model: {}
   }),
+  computed: {
+    isOpenForm: {
+      get () {
+        return this.value
+      },
+      set (value) {
+        return this.$emit('input', value)
+      }
+    }
+  },
   mounted () {
     this.$parent.$on('openProviderForm', (item) => {
       this.model = item
@@ -111,10 +119,13 @@ export default {
   },
   methods: {
     async submitForm () {
-      await this.postDialogData(this, 'providers', this.model)
-    },
-    async cancelDialog () {
-      return await this.closeDialog(this)
+      await this.validateFormData(this)
+      if (this.model.id) {
+        this.$store.dispatch('provider/updateProvider', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('provider/createProvider', this.model)
+      }
+      this.isOpenForm = false
     }
   }
 }

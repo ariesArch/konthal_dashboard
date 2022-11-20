@@ -12,18 +12,23 @@ export const mutations = {
   }
 }
 export const actions = {
-  async get_payment_methods ({ commit }) {
-    const res = await this.$repositories.payment_method.all()
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { paymentMethods } = data.data
-      commit('SET_PAYMENTMETHODS', data.data)
-    } else {
-    // Handle error here
-    }
+  async getPaymentMethods ({ commit }) {
+    // const res = await this.$repositories.payment_method.all()
+    // const { status, data } = res
+    // if (status === 200 && data.status === 1 && data.data) {
+    // //   const { paymentMethods } = data.data
+    //   commit('SET_PAYMENTMETHODS', data.data)
+    // } else {
+    // // Handle error here
+    // }
+    await this.$baseRepository.all('payment_methods', (data) => {
+      commit('SET_PAYMENTMETHODS', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
-  async get_payment_method ({ commit }, paymentMethod) {
+  async getPaymentMethod ({ commit }, paymentMethod) {
     const res = await this.$repositories.payment_method.show(paymentMethod)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
@@ -34,29 +39,23 @@ export const actions = {
     }
   },
 
-  async create_payment_method ({ commit }, paymentMethod) {
-    const res = await this.$repositories.payment_method.create(paymentMethod)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { paymentMethod } = data
-      commit('SET_PAYMENTMETHOD', data.data)
-    } else {
-    // Handle error here
-    }
+  async createPaymentMethod ({ commit }, payload) {
+    await this.$baseRepository.create('payment_methods', payload, (data) => {
+      commit('SET_PAYMENTMETHOD', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
-  async update_payment_method ({ commit }, id, paymentMethod) {
-    const res = await this.$repositories.payment_method.update(id, paymentMethod)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-    //   const { paymentMethod } = data
-      commit('SET_PAYMENTMETHOD', data.data)
-    } else {
-    // Handle error here
-    }
+  async updatePaymentMethod ({ commit }, id, paymentMethod) {
+    await this.$repositories.payment_method.update(`payment_methods/${id}`, paymentMethod, (data) => {
+      commit('SET_PAYMENTMETHOD', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
 
-  async delete_payment_method ({ commit }, id) {
+  async deletePaymentMethod ({ commit }, id) {
     const res = await this.$repositories.payment_method.delete(id)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {

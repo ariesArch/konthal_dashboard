@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    {{ error }}
     <v-data-table :items="townships" :headers="townshipHeaders">
       <template #top>
         <v-toolbar flat>
@@ -33,8 +34,8 @@
         </v-icon>
       </template>
     </v-data-table>
-    <townshipForm v-model="openTownshipForm" :title="dialogTitle" />
-    <DetailDialog v-model="openDetailDialog" title="Township" />
+    <townshipForm v-model="openTownshipForm" :title="dialogTitle" :cities="cities" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Township" />
   </div>
 </template>
 <script>
@@ -53,21 +54,29 @@ export default {
     search: '',
     openTownshipForm: false,
     openDetailDialog: false,
+    selectedItem: {},
     dialogTitle: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('township/get_townships')
+    await store.dispatch('township/getTownships')
   },
   computed: {
     ...mapState({
       townships: (state) => {
         return state.township.townships
+      },
+      cities: (state) => {
+        return state.city.cities
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
+        this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {
@@ -75,7 +84,7 @@ export default {
         } else {
           this.dialogTitle = 'Create Township'
         }
-        this.$emit('openTownshipForm', item)
+        this.$emit('openTownshipForm', JSON.parse(JSON.stringify(item)))
         this.openTownshipForm = true
       }
     }

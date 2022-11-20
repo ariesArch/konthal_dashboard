@@ -208,43 +208,49 @@
       </v-col>
       <v-col md="6">
         <ListTable
-          :items="categorie"
-          :headers="categoryHeader"
-          title="Categories"
+          :items="product"
+          :headers="productHeaders"
+          title="Products"
           @toggleCreateDialog="showCreateDialog"
           @toggleDetailDialog="showDetailDialog"
           @toggleEditDialog="showEditDialog"
         />
       </v-col>
     </v-row>
-    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Branch" />
-    <branchForm v-model="openBranchForm" :title="dialogTitle" :cities="cities" :townships="townships" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" />
+    <branchForm
+      v-model="openBranchForm"
+      :title="dialogTitle"
+      :cities="cities"
+      :townships="townships"
+      :shops="shops"
+      :shoptypes="shopTypes"
+    />
+    <productForm v-model="openProductForm" :title="dialogTitle" :branches="branches" :categories="categories" :brands="brands" />
   </div>
 </template>
 <script>
-import localforage from 'localforage'
-import { branchHeaders, categoryHeader } from '@/utils/tableHeaders'
+// import localforage from 'localforage'
+import { mapState } from 'vuex'
+import { branchHeaders, productHeaders } from '@/utils/tableHeaders'
 import branchForm from '@/components/FormDialog/branchForm'
+import productForm from '@/components/FormDialog/productForm'
 import ListTable from '@/components/ListTable/index'
 export default {
   components: {
     branchForm,
+    productForm,
     ListTable
   },
   fetchOnServer: false,
   layout: 'dashboard',
   data: () => ({
     detail: {},
-    cities: [],
-    townships: [],
     shop_types: [],
-    main_categories: [],
-    product_categories: [],
     shopId: '',
     shopInfo: {},
-    branches: [],
     branchHeaders,
-    categoryHeader,
+    productHeaders,
     isEditing: false,
     shopPayload: {},
     isSubmitting: false,
@@ -253,24 +259,53 @@ export default {
     openBranchForm: false,
     openDetailDialog: false,
     dialogTitle: '',
-    openCategoryForm: false,
-    categorie: []
+    openProductForm: false,
+    product: [],
+    branch_id: ''
   }),
+  async fetch ({ store }) {
+    await store.dispatch('shop/getShops')
+    await store.dispatch('shopType/getShopTypes')
+  },
+  computed: {
+    ...mapState({
+      categories: (state) => {
+        return state.category.categories
+      },
+      brands: (state) => {
+        return state.brand.brands
+      },
+      branches: (state) => {
+        return state.branch.branches
+      },
+      cities: (state) => {
+        return state.city.cities
+      },
+      townships: (state) => {
+        return state.township.townships
+      },
+      shops: (state) => {
+        return state.shop.shops
+      },
+      shopTypes: (state) => {
+        return state.shopType.shopTypes
+      },
+      error: (state) => {
+        return state.error
+      }
+    })
+  },
   watch: {
     detail (newVal, oldVal) {
-      this.shopInfo = (({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township }) => ({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township }))(newVal)
+      this.shopInfo = (({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township, branches }) => ({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township, branches }))(newVal)
       this.list = newVal.branches
-      this.categorie = newVal.categories
+      this.product = newVal.products
       this.shopPayload = (({ name, name_mm, phone_number, address, description, owner, shop_type, city, township }) => ({ name, name_mm, phone_number, address, description, owner_id: owner.id, shop_type_id: shop_type.id, city_id: city.id, township_id: township.id }))(newVal)
     }
   },
   async created () {
     this.shopId = this.$route.params.slug
     await this.fetchDetail(this, `/shops/${this.shopId}`)
-  },
-  async mounted () {
-    this.cities = await localforage.getItem('stored:cities')
-    this.townships = await localforage.getItem('stored:townships')
   },
   methods: {
     async updateForm () {
@@ -299,9 +334,9 @@ export default {
         this.dialogTitle = 'Create Branch'
       } else {
         this.selectedItem.shop_id = this.shopInfo.id
-        this.$emit('openCategoryForm', this.selectedItem, this.product_categories)
-        this.openCategoryForm = true
-        this.dialogTitle = 'Create Category'
+        this.$emit('openProductForm', this.selectedItem)
+        this.openProductForm = true
+        this.dialogTitle = 'Create Product'
       }
     },
     showDetailDialog (title, item) {
@@ -310,7 +345,7 @@ export default {
         this.dialogTitle = 'Branch'
       } else {
         this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
-        this.dialogTitle = 'Category'
+        this.dialogTitle = 'Product'
       }
       this.openDetailDialog = true
     },
@@ -323,28 +358,12 @@ export default {
         this.openBranchForm = true
         this.dialogTitle = 'Edit Branch'
       } else {
-        this.selectedItem = (({ id, name, name_mm }) => ({ id, name, name_mm }))(item)
+        this.selectedItem = (({ id, name, name_mm, price, category, brand }) => ({ id, name, name_mm, price, category_id: category.id, brand_id: brand.id }))(item)
+        this.selectedItem.branch_id = item.branch_id
         this.selectedItem.shop_id = this.shopInfo.id
-        this.$emit('openCategoryForm', this.selectedItem, this.product_categories)
-        this.openCategoryForm = true
-        this.dialogTitle = 'Edit Category'
-      }
-    },
-    showDialog (type, title, item = null) {
-      if (type === 'show') {
-        this.selectedItem = (({ name, name_mm, city, township, phone_number, address, description }) => ({ name, name_mm, city_name: city.name, township_name: township.name, phone_number, address, description }))(item)
-        this.openDetailDialog = true
-      } else {
-        if (item !== null) {
-          this.selectedItem = (({ id, name, name_mm, city, township, phone_number, address, description }) => ({ id, name, name_mm, city_id: city.id, township_id: township.id, phone_number, address, description }))(item)
-          this.dialogTitle = `Edit ${title}`
-        } else {
-          this.dialogTitle = `Create ${title}`
-        }
-        this.selectedItem.shop_id = this.shopInfo.id
-        this.selectedItem.shop_type_id = this.shopInfo.shop_type.id
-        this.$emit('openBranchForm', this.selectedItem)
-        this.openBranchForm = true
+        this.$emit('openProductForm', this.selectedItem)
+        this.openProductForm = true
+        this.dialogTitle = 'Edit Product'
       }
     }
   }

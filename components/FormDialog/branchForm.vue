@@ -9,6 +9,7 @@
         <v-card-title>
           {{ title }}
         </v-card-title>
+        {{ model }}
         <v-form @submit.prevent="submitForm">
           <validation-observer ref="observer">
             <v-card-text>
@@ -34,6 +35,28 @@
                       outlined
                       :error-messages="errors"
                       label="Township"
+                    />
+                  </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="Shop">
+                    <v-autocomplete
+                      v-model="model.shop_id"
+                      :items="shops"
+                      item-text="name"
+                      item-value="id"
+                      outlined
+                      :error-messages="errors"
+                      label="Shop"
+                    />
+                  </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="ShopType">
+                    <v-autocomplete
+                      v-model="model.shop_type_id"
+                      :items="shoptypes"
+                      item-text="name"
+                      item-value="id"
+                      outlined
+                      :error-messages="errors"
+                      label="Shop Type"
                     />
                   </validation-provider>
                   <validation-provider v-slot="{errors}" rules="required" name="Name">
@@ -62,41 +85,25 @@
               <v-btn
                 color="primary"
                 outlined
-                @click="cancelDialog"
+                @click="isOpenForm=false"
               >
                 Cancel
               </v-btn>
               <v-btn
                 color="primary"
                 type="submit"
-                :disabled="isSubmitting"
               >
                 Submit
               </v-btn>
             </v-card-actions>
           </validation-observer>
         </v-form>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            outlined
-            @click="isOpenForm=false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="primary"
-            type="submit"
-          >
-            Submit
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     value: {
@@ -114,13 +121,23 @@ export default {
     townships: {
       type: Array,
       default: () => ([])
+    },
+    shops: {
+      type: Array,
+      default: () => ([])
+    },
+    shoptypes: {
+      type: Array,
+      default: () => ([])
     }
   },
   data: () => ({
-    isSubmitting: false,
     model: {}
   }),
   computed: {
+    ...mapGetters({
+      isUpdateBranch: 'isUpdateBranch'
+    }),
     isOpenForm: {
       get () {
         return this.value
@@ -136,11 +153,14 @@ export default {
     })
   },
   methods: {
-    async submitForm ({ store }) {
-      await this.postDialogData(this, 'branches', this.model)
-    },
-    async cancelDialog () {
-      return await this.closeDialog(this)
+    async submitForm () {
+      await this.validateFormData(this)
+      if (this.model.id) {
+        this.$store.dispatch('branch/updateBranch', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('branch/createBranch', this.model)
+      }
+      this.isOpenForm = false
     }
   }
 }

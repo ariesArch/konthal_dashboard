@@ -123,6 +123,11 @@ export const paymentMethodHeaders = [
     align: 'start',
     value: 'name_mm'
   },
+  {
+    text: 'Description',
+    align: 'start',
+    value: 'description'
+  },
   { text: 'Actions', value: 'actions', sortable: false }
 ]
 export const paymentTypeHeaders = [
@@ -138,7 +143,7 @@ export const paymentTypeHeaders = [
   },
   { text: 'Actions', value: 'actions', sortable: false }
 ]
-export const categoryHeader = [
+export const productHeaders = [
   {
     text: 'Name',
     align: 'start',
@@ -148,6 +153,21 @@ export const categoryHeader = [
     text: 'Name_MM',
     align: 'start',
     value: 'name_mm'
+  },
+  {
+    text: 'Price',
+    align: 'start',
+    value: 'price'
+  },
+  {
+    text: 'Category',
+    align: 'start',
+    value: 'category.name'
+  },
+  {
+    text: 'Brand',
+    align: 'start',
+    value: 'brand.name'
   },
   { text: 'Actions', value: 'actions', sortable: false }
 

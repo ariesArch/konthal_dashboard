@@ -170,11 +170,16 @@
       </v-col>
     </v-row>
     <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Provider" />
-    <providerBranchForm v-model="openProviderBranchForm" :title="dialogTitle" :cities="cities" :townships="townships" />
+    <providerBranchForm
+      v-model="openProviderBranchForm"
+      :title="dialogTitle"
+      :cities="cities"
+      :townships="townships"
+    />
   </div>
 </template>
 <script>
-import localforage from 'localforage'
+import { mapState } from 'vuex'
 import { providerHeaders, providerBranchHeaders } from '@/utils/tableHeaders'
 import providerBranchForm from '@/components/FormDialog/providerBranchForm'
 import ListTable from '@/components/ListTable/index'
@@ -187,8 +192,6 @@ export default {
   layout: 'dashboard',
   data: () => ({
     detail: {},
-    cities: [],
-    townships: [],
     providerId: '',
     providerInfo: {},
     providerPayload: {},
@@ -203,6 +206,19 @@ export default {
     openDetailDialog: false,
     dialogTitle: ''
   }),
+  computed: {
+    ...mapState({
+      cities: (state) => {
+        return state.city.cities
+      },
+      townships: (state) => {
+        return state.township.townships
+      },
+      error: (state) => {
+        return state.error
+      }
+    })
+  },
   watch: {
     detail (newVal, oldVal) {
       this.providerInfo = (({ id, name, phone, address, email, city, township }) => ({ id, name, phone, address, email, city, township }))(newVal)
@@ -214,10 +230,10 @@ export default {
     this.providerId = this.$route.params.id
     await this.fetchDetail(this, `/providers/${this.providerId}`)
   },
-  async mounted () {
-    this.cities = await localforage.getItem('stored:cities')
-    this.townships = await localforage.getItem('stored:townships')
-  },
+  // async mounted () {
+  //   this.cities = await localforage.getItem('stored:cities')
+  //   this.townships = await localforage.getItem('stored:townships')
+  // },
   methods: {
     async updateForm () {
       this.isSubmitting = true

@@ -33,7 +33,14 @@
         </v-icon>
       </template>
     </v-data-table>
-    <branchForm v-model="openBranchForm" :title="dialogTitle" />
+    <branchForm
+      v-model="openBranchForm"
+      :title="dialogTitle"
+      :cities="cities"
+      :townships="townships"
+      :shops="shops"
+      :shoptypes="shopTypes"
+    />
     <DetailDialog v-model="openDetailDialog" title="Branch" />
   </div>
 </template>
@@ -56,17 +63,34 @@ export default {
     openDetailDialog: false
   }),
   async fetch ({ store }) {
-    await store.dispatch('branch/get_branches')
+    await store.dispatch('branch/getBranches')
+    await store.dispatch('shop/getShops')
+    await store.dispatch('shopType/getShopTypes')
   },
   computed: {
     ...mapState({
       branches: (state) => {
         return state.branch.branches
+      },
+      cities: (state) => {
+        return state.city.cities
+      },
+      townships: (state) => {
+        return state.township.townships
+      },
+      shops: (state) => {
+        return state.shop.shops
+      },
+      shopTypes: (state) => {
+        return state.shopType.shopTypes
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
         this.openDetailDialog = !this.openDetailDialog
       } else {
@@ -75,7 +99,7 @@ export default {
         } else {
           this.dialogTitle = 'Create Branch'
         }
-        this.$emit('openBranchForm', item)
+        this.$emit('openBranchForm', JSON.parse(JSON.stringify(item)))
         this.openBranchForm = true
       }
     }

@@ -7,9 +7,9 @@
     >
       <v-card>
         <v-card-title>
-          {{ title }} - {{ model.name }}
+          {{ title }}
         </v-card-title>
-
+        {{ model }}
         <v-form @submit.prevent="submitForm">
           <validation-observer ref="observer">
             <v-card-text>
@@ -37,19 +37,44 @@
                       label="Township"
                     />
                   </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="Owner">
+                    <v-autocomplete
+                      v-model="model.owner_id"
+                      :items="owners"
+                      item-text="name"
+                      item-value="id"
+                      outlined
+                      :error-messages="errors"
+                      label="Owner"
+                    />
+                  </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="ShopType">
+                    <v-autocomplete
+                      v-model="model.shop_type_id"
+                      :items="shoptypes"
+                      item-text="name"
+                      item-value="id"
+                      outlined
+                      :error-messages="errors"
+                      label="Shop Type"
+                    />
+                  </validation-provider>
                   <validation-provider v-slot="{errors}" rules="required" name="Name">
                     <v-text-field v-model="model.name" outlined :error-messages="errors" label="Name" />
                   </validation-provider>
-                  <validation-provider v-slot="{errors}" rules="required" name="Email">
-                    <v-text-field v-model="model.email" outlined label="Email" :error-messages="errors" />
+                  <validation-provider v-slot="{errors}" rules="required" name="NameMM">
+                    <v-text-field v-model="model.name_mm" outlined :error-messages="errors" label="NameMM" />
                   </validation-provider>
                 </v-col>
                 <v-col md="6">
                   <validation-provider v-slot="{errors}" rules="required" name="Phone Number">
-                    <v-text-field v-model="model.phone" outlined label="Phone Number" :error-messages="errors" />
+                    <v-text-field v-model="model.phone_number" outlined label="Phone Number" :error-messages="errors" />
                   </validation-provider>
                   <validation-provider v-slot="{errors}" rules="required" name="Address">
                     <v-textarea v-model="model.address" outlined label="Address" :error-messages="errors" />
+                  </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="Description">
+                    <v-textarea v-model="model.description" outlined label="Description" :error-messages="errors" />
                   </validation-provider>
                 </v-col>
               </v-row>
@@ -73,8 +98,6 @@
             </v-card-actions>
           </validation-observer>
         </v-form>
-
-        <v-divider />
       </v-card>
     </v-dialog>
   </div>
@@ -97,6 +120,14 @@ export default {
     townships: {
       type: Array,
       default: () => ([])
+    },
+    owners: {
+      type: Array,
+      default: () => ([])
+    },
+    shoptypes: {
+      type: Array,
+      default: () => ([])
     }
   },
   data: () => ({
@@ -113,7 +144,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.$on('openProviderBranchForm', (item) => {
+    this.$parent.$on('openDepartmentForm', (item) => {
       this.model = item
     })
   },
@@ -121,9 +152,9 @@ export default {
     async submitForm () {
       await this.validateFormData(this)
       if (this.model.id) {
-        this.$store.dispatch('providerBranch/updateProviderBranch', this.model.id, this.model)
+        this.$store.dispatch('shop/updateShop', this.model.id, this.model)
       } else {
-        this.$store.dispatch('providerBranch/createProviderBranch', this.model)
+        this.$store.dispatch('shop/createShop', this.model)
       }
       this.isOpenForm = false
     }

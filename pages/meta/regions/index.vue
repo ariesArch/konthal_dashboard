@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    {{ error }}
     <v-data-table :items="regions" :headers="regionHeaders">
       <template #top>
         <v-toolbar flat>
@@ -34,7 +35,7 @@
       </template>
     </v-data-table>
     <regionForm v-model="openRegionForm" :title="dialogTitle" />
-    <DetailDialog v-model="openDetailDialog" title="Region" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Region" />
   </div>
 </template>
 <script>
@@ -53,21 +54,26 @@ export default {
     search: '',
     openRegionForm: false,
     openDetailDialog: false,
+    selectedItem: {},
     dialogTitle: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('region/get_regions')
+    await store.dispatch('region/getRegions')
   },
   computed: {
     ...mapState({
       regions: (state) => {
         return state.region.regions
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
+        this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {
@@ -75,7 +81,7 @@ export default {
         } else {
           this.dialogTitle = 'Create Region'
         }
-        this.$emit('openRegionForm', item)
+        this.$emit('openRegionForm', JSON.parse(JSON.stringify(item)))
         this.openRegionForm = true
       }
     }

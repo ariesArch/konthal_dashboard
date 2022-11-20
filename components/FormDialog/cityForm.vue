@@ -107,8 +107,9 @@ export default {
       await this.validateFormData(this)
       if (this.model.id) {
         this.$store.dispatch('city/updateCity', this.model.id, this.model)
+      } else {
+        this.$store.dispatch('city/createCity', this.model)
       }
-      this.$store.dispatch('city/createCity', this.model)
       this.isOpenForm = false
     }
   }

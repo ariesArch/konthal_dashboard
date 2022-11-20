@@ -1,5 +1,6 @@
 <template>
   <div class="container-fluid">
+    {{ error }}
     <v-data-table :items="departments" :headers="departmentHeaders">
       <template #top>
         <v-toolbar flat>
@@ -34,7 +35,7 @@
       </template>
     </v-data-table>
     <departmentForm v-model="openDepartmentForm" :title="dialogTitle" />
-    <DetailDialog v-model="openDetailDialog" title="Department" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Department" />
   </div>
 </template>
 <script>
@@ -53,21 +54,26 @@ export default {
     search: '',
     openDepartmentForm: false,
     openDetailDialog: false,
+    selectedItem: {},
     dialogTitle: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('department/get_departments')
+    await store.dispatch('department/getDepartments')
   },
   computed: {
     ...mapState({
       departments: (state) => {
         return state.department.departments
+      },
+      error: (state) => {
+        return state.error
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
+    showDialog (type, item = {}) {
       if (type === 'show') {
+        this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {
@@ -75,6 +81,7 @@ export default {
         } else {
           this.dialogTitle = 'Create Department'
         }
+        this.$emit('openDepartmentForm', JSON.parse(JSON.stringify(item)))
         this.openDepartmentForm = true
       }
     }

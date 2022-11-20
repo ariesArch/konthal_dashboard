@@ -26,32 +26,53 @@
         </v-icon>
       </template>
     </v-data-table>
+    <providerForm
+      v-model="openProviderForm"
+      :title="dialogTitle"
+      :cities="cities"
+      :townships="townships"
+    />
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
 import { providerHeaders } from '@/utils/tableHeaders'
+import providerForm from '@/components/FormDialog/providerForm'
 
 export default {
+  components: {
+    providerForm
+  },
   layout: 'dashboard',
   data: () => ({
     providerHeaders,
-    search: ''
+    search: '',
+    openProviderForm: false,
+    dialogTitle: ''
   }),
   async fetch ({ store }) {
-    await store.dispatch('provider/get_providers')
+    await store.dispatch('provider/getProviders')
   },
   computed: {
     ...mapState({
       providers: (state) => {
         return state.provider.providers
+      },
+      cities: (state) => {
+        return state.city.cities
+      },
+      townships: (state) => {
+        return state.township.townships
       }
     })
   },
   methods: {
-    showDialog (type, item = null) {
-      console.log('fnc')
+    showDialog (type = null, item = {}) {
+      this.dialogTitle = 'Create Provider'
+      this.$emit('openProviderForm', JSON.parse(JSON.stringify(item)))
+      this.openProviderForm = true
     }
   }
 }
+
 </script>

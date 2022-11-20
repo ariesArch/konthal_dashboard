@@ -13,43 +13,45 @@ export const mutations = {
 }
 
 export const actions = {
-  async get_departments ({ commit }) {
-    const res = await this.$repositories.department.all()
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      commit('SET_DEPARTMENTS', data.data)
-    } else {
-    // Handle error here
-    }
+  async getDepartments ({ commit }) {
+    // const res = await this.$repositories.department.all()
+    // const { status, data } = res
+    // if (status === 200 && data.status === 1 && data.data) {
+    //   commit('SET_DEPARTMENTS', data.data)
+    // } else {
+    // // Handle error here
+    // }
+    await this.$baseRepository.all('departments', (data) => {
+      commit('SET_DEPARTMENTS', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
-  async get_department ({ commit }, department) {
+  async getDepartment ({ commit }, department) {
     const res = await this.$repositories.department.show(department)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {
+    //   const { department } = data
       commit('SET_DEPARTMENT', data.data)
     } else {
     // Handle error here
     }
   },
-  async create_department ({ commit }, department) {
-    const res = await this.$repositories.department.create(department)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      commit('SET_DEPARTMENT', data.data)
-    } else {
-    // Handle error here
-    }
+  async createDepartment ({ commit }, department) {
+    await this.$baseRepository.create('departments', department, (data) => {
+      commit('SET_DEPARTMENT', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
-  async update_department ({ commit }, id, department) {
-    const res = await this.$repositories.department.update(id, department)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      commit('SET_DEPARTMENT', data.data)
-    } else {
-    // Handle error here
-    }
+  async updateDepartment ({ commit }, id, department) {
+    await this.$repositories.department.update(`departments/${id}`, department, (data) => {
+      commit('SET_DEPARTMENT', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
-  async delete_department ({ commit }, id) {
+  async deleteDepartment ({ commit }, id) {
     const res = await this.$repositories.department.delete(id)
     const { status, data } = res
     if (status === 200 && data.status === 1 && data.data) {

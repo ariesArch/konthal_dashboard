@@ -56,13 +56,11 @@ export const actions = {
     })
   },
   async updateCity ({ commit }, id, city) {
-    const res = await this.$repositories.city.update(id, city)
-    const { status, data } = res
-    if (status === 200 && data.status === 1 && data.data) {
-      commit('SET_CITY', data.data)
-    } else {
-      // Handle error here
-    }
+    await this.$repositories.city.update(`cities/${id}`, city, (data) => {
+      commit('SET_CITY', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   },
   async deleteCity ({ commit }, id) {
     const res = await this.$repositories.city.delete(id)

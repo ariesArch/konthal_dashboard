@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import formButton from '@/components/button/formButton.vue'
 import DetailDialog from '@/components/DetailDialog'
+import { getIcon, getLabel } from '@/utils/localize'
 import ErrorSnackBar from '@/components/base/ErrorSnackBar'
 Vue.mixin({
   computed: {
@@ -78,7 +79,7 @@ Vue.mixin({
       if (!isErrorFree) {
         that.isSubmitting = false
       }
-    }
+    },
     // async postDialogData (that, URL, payload, intendedList = null) {
     //   that.isSubmitting = true
     //   const isErrorFree = await that.$refs.observer.validate()
@@ -115,12 +116,12 @@ Vue.mixin({
     //   that.$parent.selectedItem = {}
     //   that.$emit('input', false)
     // },
-    // getItemIcon (key) {
-    //   return getIcon(key)
-    // },
-    // getItemLabel (key) {
-    //   return getLabel(key)
-    // }
+    getItemIcon (key) {
+      return getIcon(key)
+    },
+    getItemLabel (key) {
+      return getLabel(key)
+    }
   }
 
 })
