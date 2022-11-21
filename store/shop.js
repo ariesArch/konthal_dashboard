@@ -57,7 +57,7 @@ export const actions = {
     })
   },
 
-  async updateShop ({ commit }, id, shop) {
+  async updateShop ({ commit }, [id, shop]) {
     await this.$repositories.shop.update(id, shop, (data) => {
       commit('SET_SHOP', data)
     }, (message) => {

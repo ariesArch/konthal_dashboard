@@ -152,7 +152,7 @@ export default {
     async submitForm () {
       await this.validateFormData(this)
       if (this.model.id) {
-        this.$store.dispatch('shop/updateShop', this.model.id, this.model)
+        this.$store.dispatch('shop/updateShop', [this.model.id, this.model])
       } else {
         this.$store.dispatch('shop/createShop', this.model)
       }

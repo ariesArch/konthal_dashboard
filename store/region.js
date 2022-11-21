@@ -47,8 +47,8 @@ export const actions = {
     })
   },
 
-  async updateRegion ({ commit }, id, region) {
-    await this.$repositories.region.update(`regions/${id}`, region, (data) => {
+  async updateRegion ({ commit }, [id, region]) {
+    await this.$repositories.region.update(id, region, (data) => {
       commit('SET_REGION', data)
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })

@@ -47,8 +47,8 @@ export const actions = {
     })
   },
 
-  async updateProduct ({ commit }, id, product) {
-    await this.$repositories.product.update(`products/${id}`, product, (data) => {
+  async updateProduct ({ commit }, [id, product]) {
+    await this.$repositories.product.update(id, product, (data) => {
       commit('SET_PRODUCT', data)
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })

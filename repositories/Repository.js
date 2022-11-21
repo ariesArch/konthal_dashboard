@@ -10,6 +10,7 @@ import ProviderRepository from '~/repositories/ProviderRepository'
 import DepartmentRepository from '~/repositories/DepartmentRepository'
 import ProductRepository from '~/repositories/ProductRepository'
 import ShopStaffRepository from '~/repositories/ShopStaffRepository'
+import ProviderBranchRepository from '~/repositories/ProviderBranchRepository'
 
 export default $axios => ({
   shop: ShopRepository($axios),
@@ -21,6 +22,7 @@ export default $axios => ({
   payment_type: PaymentTypeRepository($axios),
   owner: OwnerRepository($axios),
   provider: ProviderRepository($axios),
+  provider_branch: ProviderBranchRepository($axios),
   department: DepartmentRepository($axios),
   product: ProductRepository($axios),
   shop_staff: ShopStaffRepository($axios)

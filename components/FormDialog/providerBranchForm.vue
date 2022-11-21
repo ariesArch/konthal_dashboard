@@ -121,7 +121,7 @@ export default {
     async submitForm () {
       await this.validateFormData(this)
       if (this.model.id) {
-        this.$store.dispatch('providerBranch/updateProviderBranch', this.model.id, this.model)
+        this.$store.dispatch('providerBranch/updateProviderBranch', [this.model.id, this.model])
       } else {
         this.$store.dispatch('providerBranch/createProviderBranch', this.model)
       }

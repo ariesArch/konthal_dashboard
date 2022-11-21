@@ -73,7 +73,7 @@ export const actions = {
   //     // Handle error here
   //   }
   // }
-  async updateOwner ({ commit }, id, owner) {
+  async updateOwner ({ commit }, [id, owner]) {
     await this.$repositories.owner.update(id, owner, (data) => {
       commit('SET_OWNER', data)
     }, (message) => {

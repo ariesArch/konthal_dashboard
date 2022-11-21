@@ -78,7 +78,7 @@ export const actions = {
   //     // Handle error here
   //   }
   // }
-  async updateProvider ({ commit }, id, payload) {
+  async updateProvider ({ commit }, [id, payload]) {
     await this.$repositories.provider.update(id, payload, (data) => {
       commit('SET_PROVIDER', data)
     }, (message) => {

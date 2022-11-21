@@ -44,8 +44,8 @@ export const actions = {
       commit('SET_ERROR', { message }, { root: true })
     })
   },
-  async updateDepartment ({ commit }, id, department) {
-    await this.$repositories.department.update(`departments/${id}`, department, (data) => {
+  async updateDepartment ({ commit }, [id, department]) {
+    await this.$repositories.department.update(id, department, (data) => {
       commit('SET_DEPARTMENT', data)
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })

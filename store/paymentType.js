@@ -48,8 +48,8 @@ export const actions = {
     })
   },
 
-  async updatePaymentType ({ commit }, id, paymentType) {
-    await this.$repositories.payment_type.update(`payment_types/${id}`, paymentType, (data) => {
+  async updatePaymentType ({ commit }, [id, paymentType]) {
+    await this.$repositories.payment_type.update(id, paymentType, (data) => {
       commit('SET_PAYMENTTYPE', data)
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })

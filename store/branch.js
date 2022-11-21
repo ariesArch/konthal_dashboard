@@ -78,7 +78,7 @@ export const actions = {
   //     // Handle error here
   //   }
   // }
-  async updateBranch ({ commit }, id, branch) {
+  async updateBranch ({ commit }, [id, branch]) {
     await this.$repositories.branch.update(id, branch, (data) => {
       commit('SET_BRANCH', data)
     }, (message) => {

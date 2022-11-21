@@ -24,7 +24,7 @@ export default {
     await this.$store.dispatch('branch/getBranches')
     await this.$store.dispatch('shopDepartment/getShopDepartments')
     // await this.$store.dispatch('shop/getShops')
-    // await this.$store.dispatch('shopType/getShopTypes')
+    await this.$store.dispatch('shopType/getShopTypes')
     // await this.$store.dispatch('owner/getOwners')
   }
 }
