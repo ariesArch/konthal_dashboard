@@ -55,26 +55,13 @@ export const actions = {
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })
     })
+  },
+
+  async updateShop ({ commit }, [id, shop]) {
+    await this.$repositories.shop.update(id, shop, (data) => {
+      commit('SET_SHOP', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   }
-
-  // async updateShop ({ commit }, id, shop) {
-  //   const res = await this.$repositories.shop.update(id, shop)
-  //   const { status, data } = res
-  //   if (status === 200 && data.status === 1 && data.data) {
-  //   //   const { shop } = data
-  //     commit('SET_SHOP', data.data)
-  //   } else {
-  //     // Handle error here
-  //   }
-  // },
-
-//   async deleteShop ({ commit }, id) {
-//     const res = await this.$repositories.shop.delete(id)
-//     const { status, data } = res
-//     if (status === 200 && data.status === 1 && data.data) {
-//       // Remove from store
-//     } else {
-//       // Handle error here
-//     }
-//   }
 }

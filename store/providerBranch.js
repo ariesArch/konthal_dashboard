@@ -34,6 +34,13 @@ export const actions = {
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })
     })
+  },
+  async updateProviderBranch ({ commit }, [id, providerBranch]) {
+    await this.$repositories.provider_branch.update(id, providerBranch, (data) => {
+      commit('SET_PROVIDERBRANCH', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
   }
 
 }

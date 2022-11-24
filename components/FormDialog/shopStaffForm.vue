@@ -15,6 +15,28 @@
             <v-card-text>
               <v-row>
                 <v-col md="6">
+                  <validation-provider v-slot="{errors}" rules="required" name="Branch">
+                    <v-autocomplete
+                      v-model="model.branch_id"
+                      :items="branches"
+                      item-text="name"
+                      item-value="id"
+                      outlined
+                      :error-messages="errors"
+                      label="Branch"
+                    />
+                  </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="ShopDepartment">
+                    <v-autocomplete
+                      v-model="model.shop_department_id"
+                      :items="shopdepartments"
+                      item-text="name"
+                      item-value="id"
+                      outlined
+                      :error-messages="errors"
+                      label="ShopDepartment"
+                    />
+                  </validation-provider>
                   <validation-provider v-slot="{errors}" rules="required" name="City">
                     <v-autocomplete
                       v-model="model.city_id"
@@ -37,44 +59,25 @@
                       label="Township"
                     />
                   </validation-provider>
-                  <validation-provider v-slot="{errors}" rules="required" name="Shop">
-                    <v-autocomplete
-                      v-model="model.shop_id"
-                      :items="shops"
-                      item-text="name"
-                      item-value="id"
-                      outlined
-                      :error-messages="errors"
-                      label="Shop"
-                    />
-                  </validation-provider>
-                  <validation-provider v-slot="{errors}" rules="required" name="ShopType">
-                    <v-autocomplete
-                      v-model="model.shop_type_id"
-                      :items="shoptypes"
-                      item-text="name"
-                      item-value="id"
-                      outlined
-                      :error-messages="errors"
-                      label="Shop Type"
-                    />
+                  <validation-provider v-slot="{errors}" rules="required" name="Username">
+                    <v-text-field v-model="model.username" outlined :error-messages="errors" label="Username" />
                   </validation-provider>
                   <validation-provider v-slot="{errors}" rules="required" name="Name">
                     <v-text-field v-model="model.name" outlined :error-messages="errors" label="Name" />
-                  </validation-provider>
-                  <validation-provider v-slot="{errors}" rules="required" name="NameMM">
-                    <v-text-field v-model="model.name_mm" outlined :error-messages="errors" label="NameMM" />
                   </validation-provider>
                 </v-col>
                 <v-col md="6">
                   <validation-provider v-slot="{errors}" rules="required" name="Phone Number">
                     <v-text-field v-model="model.phone_number" outlined label="Phone Number" :error-messages="errors" />
                   </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="Email">
+                    <v-textarea v-model="model.email" outlined label="Email" :error-messages="errors" />
+                  </validation-provider>
+                  <validation-provider v-slot="{errors}" rules="required" name="Password">
+                    <v-text-field v-model="model.password" outlined label="Password" :error-messages="errors" />
+                  </validation-provider>
                   <validation-provider v-slot="{errors}" rules="required" name="Address">
                     <v-textarea v-model="model.address" outlined label="Address" :error-messages="errors" />
-                  </validation-provider>
-                  <validation-provider v-slot="{errors}" rules="required" name="Description">
-                    <v-textarea v-model="model.description" outlined label="Description" :error-messages="errors" />
                   </validation-provider>
                 </v-col>
               </v-row>
@@ -122,11 +125,11 @@ export default {
       type: Array,
       default: () => ([])
     },
-    shops: {
+    branches: {
       type: Array,
       default: () => ([])
     },
-    shoptypes: {
+    shopdepartments: {
       type: Array,
       default: () => ([])
     }
@@ -148,7 +151,7 @@ export default {
     }
   },
   mounted () {
-    this.$parent.$on('openBranchForm', (item) => {
+    this.$parent.$on('openShopStaffForm', (item) => {
       this.model = item
     })
   },
@@ -156,9 +159,9 @@ export default {
     async submitForm () {
       await this.validateFormData(this)
       if (this.model.id) {
-        this.$store.dispatch('branch/updateBranch', [this.model.id, this.model])
+        this.$store.dispatch('shopStaff/updateShopStaff', [this.model.id, this.model])
       } else {
-        this.$store.dispatch('branch/createBranch', this.model)
+        this.$store.dispatch('shopStaff/createShopStaff', this.model)
       }
       this.isOpenForm = false
     }

@@ -268,3 +268,43 @@ export const providerBranchHeaders = [
   { text: 'Actions', value: 'actions', sortable: false }
 
 ]
+
+export const shopStaffHeaders = [
+  {
+    text: 'UaerName',
+    align: 'start',
+    value: 'username'
+  },
+  {
+    text: 'Name',
+    align: 'start',
+    value: 'name'
+  },
+  {
+    text: 'Phone',
+    align: 'start',
+    value: 'phone_number'
+  },
+  {
+    text: 'Email',
+    align: 'start',
+    value: 'email'
+  },
+  {
+    text: 'Address',
+    align: 'start',
+    value: 'address'
+  },
+  {
+    text: 'City',
+    align: 'start',
+    value: 'city.name'
+  },
+  {
+    text: 'Township',
+    align: 'start',
+    value: 'township.name'
+  },
+  { text: 'Actions', value: 'actions', sortable: false }
+
+]

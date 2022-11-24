@@ -206,11 +206,21 @@
           @toggleEditDialog="showEditDialog"
         />
       </v-col>
-      <v-col md="6">
+      <v-col md="5">
         <ListTable
           :items="product"
           :headers="productHeaders"
           title="Products"
+          @toggleCreateDialog="showCreateDialog"
+          @toggleDetailDialog="showDetailDialog"
+          @toggleEditDialog="showEditDialog"
+        />
+      </v-col>
+      <v-col md="7">
+        <ListTable
+          :items="shop_staffs"
+          :headers="shopStaffHeaders"
+          title="ShopStaffs"
           @toggleCreateDialog="showCreateDialog"
           @toggleDetailDialog="showDetailDialog"
           @toggleEditDialog="showEditDialog"
@@ -226,20 +236,36 @@
       :shops="shops"
       :shoptypes="shopTypes"
     />
-    <productForm v-model="openProductForm" :title="dialogTitle" :branches="branches" :categories="categories" :brands="brands" />
+    <productForm
+      v-model="openProductForm"
+      :title="dialogTitle"
+      :branches="branches"
+      :categories="categories"
+      :brands="brands"
+    />
+    <shopStaffForm
+      v-model="openShopStaffForm"
+      :title="dialogTitle"
+      :cities="cities"
+      :branches="branches"
+      :townships="townships"
+      :shopdepartments="shopDepartments"
+    />
   </div>
 </template>
 <script>
 // import localforage from 'localforage'
 import { mapState } from 'vuex'
-import { branchHeaders, productHeaders } from '@/utils/tableHeaders'
+import { branchHeaders, productHeaders, shopStaffHeaders } from '@/utils/tableHeaders'
 import branchForm from '@/components/FormDialog/branchForm'
 import productForm from '@/components/FormDialog/productForm'
+import shopStaffForm from '@/components/FormDialog/shopStaffForm'
 import ListTable from '@/components/ListTable/index'
 export default {
   components: {
     branchForm,
     productForm,
+    shopStaffForm,
     ListTable
   },
   fetchOnServer: false,
@@ -251,16 +277,19 @@ export default {
     shopInfo: {},
     branchHeaders,
     productHeaders,
+    shopStaffHeaders,
     isEditing: false,
     shopPayload: {},
     isSubmitting: false,
     isFetching: false,
     selectedItem: {},
     openBranchForm: false,
+    openShopStaffForm: false,
     openDetailDialog: false,
     dialogTitle: '',
     openProductForm: false,
     product: [],
+    shop_staffs: [],
     branch_id: ''
   }),
   async fetch ({ store }) {
@@ -287,6 +316,9 @@ export default {
       shops: (state) => {
         return state.shop.shops
       },
+      shopDepartments: (state) => {
+        return state.shopDepartment.shopDepartments
+      },
       shopTypes: (state) => {
         return state.shopType.shopTypes
       },
@@ -300,6 +332,7 @@ export default {
       this.shopInfo = (({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township, branches }) => ({ id, name, name_mm, phone_number, address, description, owner, shop_type, city, township, branches }))(newVal)
       this.list = newVal.branches
       this.product = newVal.products
+      this.shop_staffs = newVal.shop_staffs
       this.shopPayload = (({ name, name_mm, phone_number, address, description, owner, shop_type, city, township }) => ({ name, name_mm, phone_number, address, description, owner_id: owner.id, shop_type_id: shop_type.id, city_id: city.id, township_id: township.id }))(newVal)
     }
   },
@@ -332,11 +365,16 @@ export default {
         this.$emit('openBranchForm', this.selectedItem)
         this.openBranchForm = true
         this.dialogTitle = 'Create Branch'
-      } else {
+      } else if (title === 'Products') {
         this.selectedItem.shop_id = this.shopInfo.id
         this.$emit('openProductForm', this.selectedItem)
         this.openProductForm = true
         this.dialogTitle = 'Create Product'
+      } else {
+        this.selectedItem.shop_id = this.shopInfo.id
+        this.$emit('openShopStaffForm', this.selectedItem)
+        this.openShopStaffForm = true
+        this.dialogTitle = 'Create Shopstaff'
       }
     },
     showDetailDialog (title, item) {
@@ -359,13 +397,20 @@ export default {
         this.$emit('openBranchForm', this.selectedItem)
         this.openBranchForm = true
         this.dialogTitle = 'Edit Branch'
-      } else {
-        this.selectedItem = (({ id, name, name_mm, price, category, brand }) => ({ id, name, name_mm, price, category_id: category.id, brand_id: brand.id }))(item)
-        this.selectedItem.branch_id = item.branch_id
+      } else if (title === 'Products') {
+        this.selectedItem = (({ id, name, name_mm, price, category, brand, branch }) => ({ id, name, name_mm, price, category_id: category.id, brand_id: brand.id, branch_id: branch.id }))(item)
+        // this.selectedItem.branch_id = item.branch_id
         this.selectedItem.shop_id = this.shopInfo.id
         this.$emit('openProductForm', this.selectedItem)
         this.openProductForm = true
         this.dialogTitle = 'Edit Product'
+      } else {
+        this.selectedItem = (({ id, name, username, email, password, address, phone_number, city, township, branch, shop_department }) => ({ id, name, username, email, password, address, phone_number, city_id: city.id, township_id: township.id, branch_id: branch.id, shop_department_id: shop_department.id }))(item)
+        // this.selectedItem.branch_id = item.branch_id
+        this.selectedItem.shop_id = this.shopInfo.id
+        this.$emit('openShopStaffForm', this.selectedItem)
+        this.openShopStaffForm = true
+        this.dialogTitle = 'Edit ShopStaff'
       }
     }
   }

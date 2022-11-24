@@ -4,6 +4,11 @@ const data = {
     mm: 'အမည်',
     icon: 'mdi-account'
   },
+  email: {
+    en: 'Email',
+    mm: 'အီးမေးလ်',
+    icon: 'mdi-account'
+  },
   name_mm: {
     en: 'Name MM',
     mm: 'အမည်',
@@ -23,6 +28,10 @@ const data = {
     en: 'Township Name',
     mm: 'မြို့နယ်အမည်',
     icon: 'mdi-city'
+  },
+  address: {
+    en: 'Address',
+    mm: 'လိပ်စာ'
   },
   description: {
     en: 'Description',

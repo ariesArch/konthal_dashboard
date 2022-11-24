@@ -51,7 +51,7 @@ export const actions = {
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })
     })
-  }
+  },
 
   // async updateOwner ({ commit }, id, owner) {
   //   const res = await this.$repositories.owner.update(id, owner)
@@ -73,4 +73,11 @@ export const actions = {
   //     // Handle error here
   //   }
   // }
+  async updateOwner ({ commit }, [id, owner]) {
+    await this.$repositories.owner.update(id, owner, (data) => {
+      commit('SET_OWNER', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
+  }
 }

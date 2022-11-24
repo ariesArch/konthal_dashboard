@@ -41,7 +41,7 @@
       :shops="shops"
       :shoptypes="shopTypes"
     />
-    <DetailDialog v-model="openDetailDialog" title="Branch" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Branch" />
   </div>
 </template>
 <script>
@@ -60,6 +60,7 @@ export default {
     search: '',
     openBranchForm: false,
     dialogTitle: '',
+    selectedItem: {},
     openDetailDialog: false
   }),
   async fetch ({ store }) {
@@ -92,6 +93,7 @@ export default {
   methods: {
     showDialog (type, item = {}) {
       if (type === 'show') {
+        this.selectedItem = (({ name, name_mm, phone_number, address, description, city, township }) => ({ name, name_mm, phone_number, address, description, city_name: city.name, township_name: township.name }))(item)
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {

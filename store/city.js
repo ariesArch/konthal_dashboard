@@ -55,8 +55,8 @@ export const actions = {
       commit('SET_ERROR', { message }, { root: true })
     })
   },
-  async updateCity ({ commit }, id, city) {
-    await this.$repositories.city.update(`cities/${id}`, city, (data) => {
+  async updateCity ({ commit }, [id, city]) {
+    await this.$repositories.city.update(id, city, (data) => {
       commit('SET_CITY', data)
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })

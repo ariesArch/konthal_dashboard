@@ -34,7 +34,7 @@ export const actions = {
     }, (message) => {
       commit('SET_ERROR', { message }, { root: true })
     })
-  }
+  },
 
   // async get_provider ({ commit }, provider) {
   //   const res = await this.$repositories.provider.show(provider)
@@ -78,4 +78,11 @@ export const actions = {
   //     // Handle error here
   //   }
   // }
+  async updateProvider ({ commit }, [id, payload]) {
+    await this.$repositories.provider.update(id, payload, (data) => {
+      commit('SET_PROVIDER', data)
+    }, (message) => {
+      commit('SET_ERROR', { message }, { root: true })
+    })
+  }
 }

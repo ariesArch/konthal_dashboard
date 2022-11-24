@@ -34,7 +34,7 @@
       </template>
     </v-data-table>
     <ownerForm v-model="openOwnerForm" :title="dialogTitle" :cities="cities" :townships="townships" />
-    <DetailDialog v-model="openDetailDialog" title="Owner" />
+    <DetailDialog v-model="openDetailDialog" :item="selectedItem" title="Owner" />
   </div>
 </template>
 <script>
@@ -54,6 +54,7 @@ export default {
     search: '',
     openOwnerForm: false,
     dialogTitle: '',
+    selectedItem: {},
     openDetailDialog: false
   }),
   async fetch ({ store }) {
@@ -75,6 +76,7 @@ export default {
   methods: {
     showDialog (type, item = {}) {
       if (type === 'show') {
+        this.selectedItem = (({ name, email, phone_number, address, city, township }) => ({ name, email, phone_number, address, city_name: city.name, township_name: township.name }))(item)
         this.openDetailDialog = !this.openDetailDialog
       } else {
         if (type === 'edit') {

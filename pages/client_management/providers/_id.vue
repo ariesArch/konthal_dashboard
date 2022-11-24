@@ -158,7 +158,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col md="6">
+      <v-col col>
         <ListTable
           :items="list"
           :headers="providerBranchHeaders"

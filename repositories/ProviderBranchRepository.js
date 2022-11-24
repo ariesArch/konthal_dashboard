@@ -1,4 +1,4 @@
-const resource = '/owners'
+const resource = '/provider_branches'
 export default $axios => ({
   all () {
     return $axios.get(`${resource}`)
