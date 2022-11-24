@@ -379,16 +379,15 @@ export default {
     },
     showDetailDialog (title, item) {
       if (title === 'Branches') {
-        this.selectedItem = (({ name, name_mm, city, township, phone_number, address, description }) => ({ name, name_mm, city_name: city.name, township_name: township.name, phone_number, address, description }))(item)
-        this.dialogTitle = 'Branch'
-      } else if (title === 'Products') {
+        this.$store.commit('branch/SET_BRANCH', item)
+        this.$router.push({ path: `/client_management/branches/${item.id}` })
+        // this.selectedItem = (({ name, name_mm, city, township, phone_number, address, description }) => ({ name, name_mm, city_name: city.name, township_name: township.name, phone_number, address, description }))(item)
+        // this.dialogTitle = 'Branch'
+      } else {
         this.selectedItem = (({ name, name_mm }) => ({ name, name_mm }))(item)
         this.dialogTitle = 'Product'
-      } else {
-        this.selectedItem = (({ name, email, address }) => ({ name, email, address }))(item)
-        this.dialogTitle = 'Shop Staff'
+        this.openDetailDialog = true
       }
-      this.openDetailDialog = true
     },
     showEditDialog (title, item) {
       if (title === 'Branches') {
