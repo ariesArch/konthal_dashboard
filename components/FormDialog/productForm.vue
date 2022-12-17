@@ -112,19 +112,21 @@
                         </validation-provider>
                       </v-col>
                     </v-row>
-                    <v-btn
-                      color="primary"
-                      outlined
-                      @click="step = 2"
-                    >
-                      Cancel
-                    </v-btn>
-                    <v-btn
-                      color="primary"
-                      @click="steps = 2"
-                    >
-                      Containue
-                    </v-btn>
+                    <div class="float-right">
+                      <v-btn
+                        color="primary"
+                        outlined
+                        @click="step = 2"
+                      >
+                        Cancel
+                      </v-btn>
+                      <v-btn
+                        color="primary"
+                        @click="steps = 2"
+                      >
+                        Containue
+                      </v-btn>
+                    </div>
                   </validation-observer>
                 </v-form>
               </v-stepper-content>
@@ -226,6 +228,38 @@
                         <p>
                           Choose your product variation and necessary information from here
                         </p>
+                        <v-btn color="primary" class="mb-3">
+                          ADD OPTION
+                        </v-btn>
+                        <v-row>
+                          <v-col>
+                            <validation-provider v-slot="{errors}" rules="required" name="Attributes">
+                              <v-autocomplete
+                                v-model="attributes[0]"
+                                :items="attribute_names"
+                                item-text="name"
+                                item-value="id"
+                                outlined
+                                :error-messages="errors"
+                                label="Attributes"
+                              />
+                            </validation-provider>
+                          </v-col>
+                          <v-col>
+                            <validation-provider v-slot="{errors}" rules="required" name="Values">
+                              <v-autocomplete
+                                v-model="values[0]"
+                                :items="attribute_values"
+                                item-text="name"
+                                item-value="id"
+                                outlined
+                                :error-messages="errors"
+                                label="Values"
+                                multiple
+                              />
+                            </validation-provider>
+                          </v-col>
+                        </v-row>
                       </v-col>
                       <v-col>
                         <v-row>
@@ -259,19 +293,21 @@
                         </v-row>
                       </v-col>
                     </v-row>
-                    <v-btn
-                      color="primary"
-                      outlined
-                      @click="steps = 1"
-                    >
-                      Back
-                    </v-btn>
-                    <v-btn
-                      color="primary"
-                      @click="steps = 2"
-                    >
-                      Containue
-                    </v-btn>
+                    <div class="float-right">
+                      <v-btn
+                        color="primary"
+                        outlined
+                        @click="steps = 1"
+                      >
+                        Back
+                      </v-btn>
+                      <v-btn
+                        color="primary"
+                        @click="steps = 2"
+                      >
+                        Containue
+                      </v-btn>
+                    </div>
                   </validation-observer>
                 </v-form>
               </v-stepper-content>
